@@ -181,7 +181,8 @@ class apps_mod {
         foreach ($table as $key => $value) {
             $primary_key = $value['primary'];
             $value['union'] && $primary_key = $value['union'];
-            $data+= (array)iDB::row("SELECT * FROM `{$value['table']}` WHERE `{$primary_key}`='$id' LIMIT 1;",ARRAY_A);
+            $udata = (array)iDB::row("SELECT * FROM `{$value['table']}` WHERE `{$primary_key}`='$id' LIMIT 1;",ARRAY_A);
+            $udata && $data+=$udata;
         }
         return $data;
     }

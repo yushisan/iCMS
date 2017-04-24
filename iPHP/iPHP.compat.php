@@ -441,3 +441,14 @@ function get_bytes($val) {
     }
     return $val;
 }
+function unicode_convert_encoding($code){
+    return mb_convert_encoding(pack("H*", $code[1]), "UTF-8", "UCS-2BE");
+}
+function unicode_decode($value){
+    return preg_replace_callback('/\\\\u([0-9a-f]{4})/i','unicode_convert_encoding',$value);
+}
+function cnjson_decode($array){
+    $json = json_encode($array);
+    $json = unicode_decode($json);
+    return $json;
+}

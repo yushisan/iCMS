@@ -207,12 +207,12 @@ $(function(){
             </div>
             <div class="input-prepend">
               <span class="add-on">菜单配置</span>
-              <textarea name="menu" id="menu" class="span8" style="height:450px;"><?php echo $rs['menu']?json_encode($rs['menu']):'' ; ?></textarea>
+              <textarea name="menu" id="menu" class="span8" style="height:450px;"><?php echo $rs['menu']?cnjson_decode($rs['menu']):'' ; ?></textarea>
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend">
               <span class="add-on">内容网址</span>
-              <textarea name="config[iurl]" id="config_iurl" class="span8" style="height:120px;"><?php echo $rs['config']['iurl']?json_encode($rs['config']['iurl']):'' ; ?></textarea>
+              <textarea name="config[iurl]" id="config_iurl" class="span8" style="height:120px;"><?php echo $rs['config']['iurl']?cnjson_decode($rs['config']['iurl']):'' ; ?></textarea>
             </div>
           </div>
           <!-- 数据表字段 -->

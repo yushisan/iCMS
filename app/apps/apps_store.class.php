@@ -39,6 +39,64 @@ class apps_store {
             return $msg;
         }
     }
+    public static function install_template($dir=null) {
+        $zipFile = self::$zipFile;
+        if(!file_exists($zipFile)){
+            return self::msg("安装包不存在",false);
+        }
+
+        iPHP::import(iPHP_LIB . '/pclzip.class.php'); //加载zip操作类
+        $zip = new PclZip($zipFile);
+        if (false == ($archive_files = $zip->extract(PCLZIP_OPT_EXTRACT_AS_STRING))) {
+          return self::msg("ZIP包错误",false);
+        }
+
+        if (0 == count($archive_files)) {
+          return self::msg("空的ZIP文件",false);
+        }
+
+        $msg = null;
+        if ($archive_files) {
+            $setup_msg = self::setup_template_file($archive_files,$dir);
+            if(is_array($setup_msg)){
+                $msg.= $setup_msg[0];
+            }else{
+                return self::msg($msg.$setup_msg);
+            }
+        }
+        self::$test OR iFS::rm(self::$zipFile);
+        $msg.= self::msg('模板安装完成',true);
+        return $msg;
+    }
+    public static function setup_template_file(&$archive_files,$dir){
+        $msg = self::msg('开始测试目录权限',true);
+        if (!iFS::checkDir(iPATH)) {
+            return self::msg(iPATH.'根目录无写权限',false);
+        }
+
+        if (!iFS::checkDir(iPHP_TPL_DIR)) {
+            return self::msg(iPHP_TPL_DIR . '目录无写权限',false);
+        }
+
+        $path = iPHP_TPL_DIR.'/'.$dir;
+        self::$test OR iFS::mkdir($path);
+
+        $msg.= self::msg('开始安装模板',true);
+        foreach ($archive_files as $file) {
+            $folder = $file['folder'] ? $file['filename'] : dirname($file['filename']);
+            $dp = $path .'/'.trim($folder,'/').'/';
+            if (!iFS::ex($dp)) {
+                self::$test OR iFS::mkdir($dp);
+                $msg.= self::msg('创建文件夹 [' . $dp . ']',true);
+            }
+            if (!$file['folder']) {
+                $fp = $path .'/'. $file['filename'];
+                self::$test OR iFS::write($fp, $file['content']);
+                $msg.= self::msg('安装文件 [' . $fp . ']',true);
+            }
+        }
+        return array($msg,true);
+    }
     public static function install() {
         $zipFile = self::$zipFile;
         if(!file_exists($zipFile)){
@@ -91,16 +149,11 @@ class apps_store {
             return self::msg(iPHP_APP_DIR . '目录无写权限',false);
         }
 
-        if (!iFS::checkDir(iPHP_TPL_DIR)) {
-            return self::msg(iPHP_TPL_DIR . '目录无写权限',false);
-        }
-
         self::$next = true;
         $msg.= self::msg('开始安装应用',true);
         foreach ($archive_files as $file) {
             $folder = $file['folder'] ? $file['filename'] : dirname($file['filename']);
             $dp = iPHP_APP_DIR .'/'.trim($folder,'/').'/';
-            // $dp = self::check_tpl_path($dp);
 
             if (!iFS::ex($dp)) {
                 self::$test OR iFS::mkdir($dp);
@@ -108,7 +161,6 @@ class apps_store {
             }
             if (!$file['folder']) {
                 $fp = iPHP_APP_DIR .'/'. $file['filename'];
-                // $fp = self::check_tpl_path($fp);
                 self::$test OR iFS::write($fp, $file['content']);
                 $msg.= self::msg('安装文件 [' . $fp . ']',true);
             }
@@ -170,7 +222,10 @@ class apps_store {
         if(self::$msg_mode=='alert'){
             $s OR iUI::alert($text);
         }else{
-            return $text.'......'.iUI::check($s).'<iCMS>';
+            $a = 80;
+            $c = $a-strlen($text);
+            $c<1 && $c = 1;
+            return $text.str_repeat('.',$c).iUI::check($s).'<iCMS>';
         }
     }
     // public static function check_tpl_path($path){

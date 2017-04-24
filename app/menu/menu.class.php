@@ -15,8 +15,8 @@ class menu {
     public static $priv_key   = 0;
 
 	public static function init() {
-        // self::get_cache();
-        self::get_array(true);
+        self::get_cache();
+        // self::get_array(true);
 	}
 
     public static function mid($vars,$sort=0,$parent=null,$level=0){
@@ -245,11 +245,11 @@ class menu {
 			$href = "#".$a['href'];
 		}
 
+        empty($a['title']) && $a['title'] = $a['caption'];
 
 		$li = '<li class="'.$a['class'].'" title="'.$a['title'].'" menu-sort="'.$a['sort'].'">';
-
 		$link = '<a href="'.$href.'"';
-		$a['title']  && $link.= ' title="'.$a['title'].'"';
+		$link.= ' title="'.$a['title'].'"';
 		$a['a_class']&& $link.= ' class="'.$a['a_class'].'"';
 		$a['target'] && $link.= ' target="'.$a['target'].'"';
 

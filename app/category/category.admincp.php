@@ -402,8 +402,8 @@ class categoryAdmincp {
         }else {
             $this->del_content($cid);
             iDB::query("DELETE FROM `#iCMS@__category` WHERE `cid` = '$cid'");
-            iMAP::del_data($cid,$this->appid,'category','node');
-            iMAP::del_data($cid,iCMS_APP_CATEGORY,'prop');
+            iMap::del_data($cid,$this->appid,'category','node');
+            iMap::del_data($cid,iCMS_APP_CATEGORY,'prop');
             category::cahce_del($cid);
             $msg = '删除成功!';
         }

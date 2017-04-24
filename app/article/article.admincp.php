@@ -300,7 +300,7 @@ class articleAdmincp{
             }
             $_count = count($rs);
         }
-        include admincp::view("files.manage","admincp");
+        include admincp::view("files.manage","files");
     }
     /**
      * [正文预览]
@@ -528,7 +528,6 @@ class articleAdmincp{
 
         $pubdate   = str2time($_POST['pubdate']);
         $postype   = $_POST['postype']?$_POST['postype']:0;
-        isset($_POST['inbox']) && $status = "0";
         $userid OR $userid = members::$userid;
         $tags && $tags = preg_replace('/<[\/\!]*?[^<>]*?>/is','',$tags);
 
@@ -711,9 +710,9 @@ class articleAdmincp{
         $art = article::row($id,'cid,pic,tags',$sql);
         category::check_priv($art['cid'],'cd','alert');
 
-        $fids   = iFile::index_fileid($id,self::$appid);
-        $pieces = iFile::delete_file($fids);
-        iFile::delete_fdb($fids,$id,self::$appid);
+        $fids   = files::index_fileid($id,self::$appid);
+        $pieces = files::delete_file($fids);
+        files::delete_fdb($fids,$id,self::$appid);
         $msg.= self::del_msg(implode('<br />', $pieces).' 文件删除');
         $msg.= self::del_msg('相关文件数据删除');
 
@@ -723,8 +722,8 @@ class articleAdmincp{
             $msg.= tag::del($art['tags'],'name',$id);
         }
 
-        iMAP::del_data($id,self::$appid,'category');
-        iMAP::del_data($id,self::$appid,'prop');
+        iMap::del_data($id,self::$appid,'category');
+        iMap::del_data($id,self::$appid,'prop');
 
         article::del_comment($id);
         $msg.= self::del_msg('评论数据删除');
@@ -780,7 +779,7 @@ class articleAdmincp{
             $id = article::data_insert($data);
         }
 
-        $_POST['iswatermark']&& iFile::$watermark = false;
+        $_POST['iswatermark']&& files::$watermark = false;
 
         if(isset($_POST['remote'])){
             $body = $this->remotepic($body,true,$aid);
@@ -842,7 +841,7 @@ class articleAdmincp{
             $picdata = addslashes(serialize($picdata));
             $haspic  = 1;
             article::update(compact('haspic','pic','picdata'),array('id'=>$aid));
-            iFile::set_map(self::$appid,$aid,$pic,'path');
+            files::set_map(self::$appid,$aid,$pic,'path');
         }
     }
     public function remotepic($content,$remote = false) {
@@ -903,7 +902,7 @@ class articleAdmincp{
         preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $match);
         $array  = array_unique($match[1]);
         foreach ($array as $key => $value) {
-            iFile::set_map(self::$appid,$indexid,$value,'path');
+            files::set_map(self::$appid,$indexid,$value,'path');
         }
     }
 

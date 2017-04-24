@@ -111,8 +111,8 @@ class tagAdmincp{
      */
     public function do_import(){
         $_POST['cid'] OR iUI::alert('请选择标签所属栏目！');
-        iFile::$check_data        = false;
-        iFile::$cloud_enable      = false;
+        files::$check_data        = false;
+        files::$cloud_enable      = false;
         iFS::$config['allow_ext'] = 'txt';
         $F    = iFS::upload('upfile');
         $path = $F['RootPath'];
@@ -326,8 +326,8 @@ class tagAdmincp{
     }
     public function do_del($id = null,$dialog=true){
     	$id===null && $id=$this->id;
-        iMAP::del_data($id,$this->appid,'category');
-        iMAP::del_data($id,$this->appid,'prop');
+        iMap::del_data($id,$this->appid,'category');
+        iMap::del_data($id,$this->appid,'prop');
     	tag::del($id,'id');
     	$dialog && iUI::success("标签删除成功",'js:parent.$("#tr'.$id.'").remove();');
     }

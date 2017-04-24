@@ -16,7 +16,14 @@
 class iDevice {
     public static $config   = null;
     public static function init(&$config) {
+
+        define('iPHP_REQUEST_SCHEME',($_SERVER['SERVER_PORT'] == 443)?'https':'http');
+        define('iPHP_REQUEST_HOST',iPHP_REQUEST_SCHEME.'://'.($_SERVER['HTTP_X_HTTP_HOST']?$_SERVER['HTTP_X_HTTP_HOST']:$_SERVER['HTTP_HOST']));
+        define('iPHP_REQUEST_URI',$_SERVER['REQUEST_URI']);
+        define('iPHP_REQUEST_URL',iPHP_REQUEST_HOST.iPHP_REQUEST_URI);
+
         self::$config = $config['template'];
+
         /**
          * 判断指定设备
          */
@@ -56,6 +63,7 @@ class iDevice {
         define('iPHP_DOMAIN', $domain);
 
         iPHP_DOMAIN == iPHP_ROUTER_URL OR self::router($config['router']);
+        iPHP_DOMAIN == iPHP_ROUTER_URL OR self::router($config['FS']);
         // self::redirect();
     }
     public static function router(&$router,$deep=false) {
@@ -83,7 +91,7 @@ class iDevice {
             }
             if(self::$config['device'])foreach (self::$config['device'] as $key => $value) {
                 if($value['domain']){
-                    $name = strtolower($value['name']);
+                    $name = trim($value['name']);
                     $urls[$name] = str_replace(iPHP_ROUTER_URL, $value['domain'], $iurl);
                 }
             }
@@ -92,11 +100,6 @@ class iDevice {
     }
 
     private static function redirect(){
-        define('iPHP_REQUEST_SCHEME',($_SERVER['SERVER_PORT'] == 443)?'https':'http');
-        define('iPHP_REQUEST_HOST',iPHP_REQUEST_SCHEME.'://'.($_SERVER['HTTP_X_HTTP_HOST']?$_SERVER['HTTP_X_HTTP_HOST']:$_SERVER['HTTP_HOST']));
-        define('iPHP_REQUEST_URI',$_SERVER['REQUEST_URI']);
-        define('iPHP_REQUEST_URL',iPHP_REQUEST_HOST.iPHP_REQUEST_URI);
-
         if(stripos(iPHP_REQUEST_URL, iPHP_DOMAIN) === false){
             $redirect_url = str_replace(iPHP_REQUEST_HOST,iPHP_DOMAIN, iPHP_REQUEST_URL);
             header("Expires:1 January, 1970 00:00:01 GMT");
@@ -121,7 +124,7 @@ class iDevice {
                         $check = true;
                     }
                 } elseif ($flag == 'domain') {
-                    if (stripos($device['domain'], $_SERVER['HTTP_HOST']) !== false && empty($device['ua'])) {
+                    if ($device['domain']==iPHP_REQUEST_HOST && empty($device['ua'])) {
                         $check = true;
                     }
                 }

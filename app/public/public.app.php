@@ -32,9 +32,9 @@ class publicApp {
 		iSeccode::run($pre);
 	}
 
-	public function API_qrcode() {
-		$url = iSecurity::escapeStr($_GET['url']);
-		iPHP::vendor('QRcode', $url);
+	public function API_qrcode($url=null) {
+		$url===null && $url = iSecurity::escapeStr($_GET['url']);
+		echo iPHP::callback(array("plugin_QRcode","HOOK"),$url);
 	}
 	public static function seccode() {
 		return iView::fetch('iCMS://public.seccode.htm');

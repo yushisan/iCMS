@@ -59,7 +59,7 @@ class configAdmincp{
         $config['iurl'] = apps::get_iurl();
         self::write($config);
     }
-    public static function head($title=null){
+    public static function head($title=null,$action="config"){
         include admincp::view("config.head","config");
     }
     public static function foot(){
@@ -126,7 +126,7 @@ class configAdmincp{
     public static function set($value, $name, $appid, $cache = false) {
         $cache && iCache::set('config/' . $name, $value, 0);
         // is_array($value) && $value = addslashes(serialize($value));
-        is_array($value) && $value = addslashes(json_encode($value));
+        is_array($value) && $value = addslashes(cnjson_decode($value));
         $check  = iDB::value("SELECT `name` FROM `#iCMS@__config` WHERE `appid` ='$appid' AND `name` ='$name'");
         $fields = array('appid','name','value');
         $data   = compact ($fields);

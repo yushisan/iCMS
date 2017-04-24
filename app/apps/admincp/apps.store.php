@@ -16,15 +16,14 @@ $(function(){
   $("#<?php echo APP_FORMID;?>").batch();
 });
 var pay_notify_timer;
-function pay_notify (key,sid,name,d) {
+function pay_notify (key,sid,app,name,d) {
   pay_notify_timer = window.setInterval(function(){
-    console.log(key,sid);
     $.getJSON(
       "<?php echo apps_store::STORE_URL;?>/store.pay.notify?callback=?",{key,sid,name},
       function(o){
           //console.log(o);
           if(o.code=="1" && o.url && o.t){
-            $("#iPHP_FRAME").attr("src","<?php echo APP_URI;?>&do=premium_install&url="+o.url+'&name='+name+'&key='+key+'&sid='+sid)
+            $("#iPHP_FRAME").attr("src","<?php echo APP_URI;?>&do=<?php echo admincp::$APP_DO; ?>_premium_install&url="+o.url+'&sapp='+app+'&name='+name+'&key='+key+'&sid='+sid)
             clear_pay_notify_timer();
             d.close().remove();
           }else if(o.code=="2"){
@@ -65,7 +64,7 @@ function clear_pay_notify_timer () {
   <div class="widget-box" id="<?php echo APP_BOXID;?>">
     <div class="widget-title">
       <span class="icon">
-        <i class="fa fa-bank"></i> <span>应用市场</span>
+        <i class="fa fa-bank"></i> <span><?php echo $title;?>市场</span>
       </span>
     </div>
     <div class="widget-content">
@@ -90,6 +89,7 @@ function clear_pay_notify_timer () {
 .item-author .avatar img {width: 60px;height: 60px;border-radius: 30px;float: left;}
 .item-author .name{margin-left: 70px; line-height: 30px;}
 .item-author .name span.version{color: #666;}
+.item-author .name span.size{color: #666;}
 .item-author .name b{display: block;}
 .item-author .name .demo{font-size: 12px;}
 .item-description{height: 68px;margin-top: 10px;overflow: hidden;color: #666;}
@@ -114,21 +114,24 @@ function clear_pay_notify_timer () {
       <p class="avatar"><img src="{{value.avatar}}" /></p>
       <p class="name">
         <b>@{{value.author}}</b>
-        <span class="version">当前版本:{{value.version}}</span>
-        {{if value.demo}}
-          <a class="demo" href="{{value.demo}}" target="_blank">&gt;&gt;演示</a>
-        {{/if}}
+        <span class="version">版本:{{value.version}}</span>
+        <span class="size">大小:{{value.size}}MB</span>
       </p>
     </div>
     <div class="item-description">
         {{if value.premium}}
-          <span class="label label-important">付费版</span>
+          <span class="label label-important">付费<?php echo $title;?></span>
           <span class="label label-success">价格:{{value.price}} <i class="fa fa-rmb"></i></span>
         {{/if}}
-        <p>{{value.description}}</p>
+        <p>
+        {{value.description}}
+        {{if value.demo}}
+          <a class="demo" href="{{value.demo}}" target="_blank">&gt;&gt;演示</a>
+        {{/if}}
+        </p>
     </div>
     <div class="item-action">
-      <a href="<?php echo APP_FURI; ?>&do=store_install&sid={{value.id}}" target="iPHP_FRAME" class="btn btn-large btn-success">
+      <a href="<?php echo APP_FURI; ?>&do=<?php echo admincp::$APP_DO; ?>_install&sid={{value.id}}" target="iPHP_FRAME" class="btn btn-large btn-success">
         <i class="fa fa-download"></i>
         {{if value.premium}}
         付费安装
@@ -143,7 +146,7 @@ function clear_pay_notify_timer () {
 </script>
 <script type="text/javascript">
 $(function(){
-$.getJSON("<?php echo APP_URI; ?>&do=store_json",
+$.getJSON("<?php echo APP_URI; ?>&do=<?php echo admincp::$APP_DO; ?>_json",
         function(json){
             var html = template('store-item', {"data":json});
             $("#store-container").html(html);

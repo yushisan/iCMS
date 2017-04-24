@@ -320,7 +320,7 @@ class articleFunc{
 	            $tagArray = iSQL::values($variable,'tags','array',null,'id');
 				$tagArray && $tags_data = (array)tagApp::multi_tag($tagArray);
 	            unset($tagArray);
-	            $vars['tags'] = false;
+	            $vars['tag'] = false;
 	        }
 			foreach ($variable as $key => $value) {
 				$value = articleApp::value($value, false, $vars);

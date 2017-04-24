@@ -8,7 +8,9 @@
 * @licence http://www.idreamsoft.com/license.php
 */
 class filesAdmincp{
+    public static $appid = null;
     public function __construct() {
+        self::$appid = iPHP::appid(__CLASS__);
 	    $this->from		= iSecurity::escapeStr($_GET['from']);
 	    $this->callback	= iSecurity::escapeStr($_GET['callback']);
 		$this->click	= iSecurity::escapeStr($_GET['click']);
@@ -17,6 +19,24 @@ class filesAdmincp{
     	$this->id		= (int)$_GET['id'];
 	    $this->callback OR $this->callback	= 'icms';
         $this->upload_max_filesize = get_cfg_var("upload_max_filesize");
+    }
+    public function _trim(&$value){
+        $value = trim($value);
+    }
+    public function do_cloud_config(){
+        configAdmincp::app(self::$appid,'cloud');
+    }
+    public function do_save_cloud_config(){
+        array_walk_recursive($_POST['config'],array(__CLASS__,'_trim'));
+        configAdmincp::save(self::$appid,'cloud');
+    }
+    public static function cloud_config_file(){
+        $array = array();
+        foreach (glob(iPHP_APP_DIR."/files/admincp/cloud_*.php") as $filename) {
+            $sdk = str_replace(array('cloud_','.php'), '', basename($filename));
+            $array[$sdk] = $filename;
+        }
+        return $array;
     }
     /**
      * [单文件上传页面]
@@ -43,27 +63,40 @@ class filesAdmincp{
         if($_GET['keywords']) {
             if($_GET['st']=="filename") {
                 $sql.=" AND `filename` REGEXP '{$_GET['keywords']}'";
-            }else if($_GET['st']=="indexid") {
-                $sql.=" AND `indexid`='{$_GET['keywords']}'";
             }else if($_GET['st']=="userid") {
                 $sql.=" AND `userid` = '{$_GET['keywords']}'";
             }else if($_GET['st']=="ofilename") {
                 $sql.=" AND `ofilename` REGEXP '{$_GET['keywords']}'";
             }else if($_GET['st']=="size") {
-                $sql.=" AND `size` REGEXP '{$_GET['keywords']}'";
+                $sql.=" AND `size` = '{$_GET['keywords']}'";
+            }else if($_GET['st']=="path") {
+                $sql.=" AND `path` REGEXP '{$_GET['keywords']}'";
+            }else if($_GET['st']=="ext") {
+                $sql.=" AND `ext` = '{$_GET['keywords']}'";
             }
         }
-		$_GET['indexid'] 	&& $sql.=" AND `indexid`='{$_GET['indexid']}'";
-        $_GET['starttime'] 	&& $sql.=" and `time`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
-        $_GET['endtime'] 	&& $sql.=" and `time`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
+
+        if($_GET['indexid'] ||($_GET['st']=="indexid" && $_GET['keywords'])){
+            $_GET['indexid'] && $indexid = (int)$_GET['indexid'];
+            $_GET['keywords'] && $indexid = (int)$_GET['keywords'];
+            $msql = iSQL::in($indexid,'indexid',false,true);
+            $msql && $fids_array = iDB::all("SELECT `fileid` FROM ".files::$_MAP_TABLE." WHERE {$msql}");
+            $ids = iSQL::values($fids_array,'fileid');
+            $ids = $ids ? $ids : '0';
+            $sql.= "AND `id` IN({$ids})";
+        }
+        isset($_GET['type'])  && $sql.=" AND `type`='".(int)$_GET['type']."'";
+
+        $_GET['starttime']  && $sql.=" AND `time`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
+        $_GET['endtime'] 	&& $sql.=" AND `time`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
 
         isset($_GET['userid']) 	&& $uri.='&userid='.(int)$_GET['userid'];
 
         $orderby	= $_GET['orderby']?iSecurity::escapeStr($_GET['orderby']):"id DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:50;
-		$total		= iCMS::page_total_cache("SELECT count(*) FROM `#iCMS@__files` {$sql}","G");
+		$total		= iCMS::page_total_cache("SELECT count(*) FROM ".files::$_DATA_TABLE." {$sql}","G");
         iUI::pagenav($total,$maxperpage,"个文件");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__files` {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
+        $rs     = iDB::all("SELECT * FROM ".files::$_DATA_TABLE." {$sql} order by {$orderby} LIMIT ".iUI::$offset." , {$maxperpage}");
         $_count = count($rs);
         $widget = array('search'=>1,'id'=>1,'uid'=>1,'index'=>1);
     	include admincp::view("files.manage");
@@ -78,7 +111,7 @@ class filesAdmincp{
         $ext       = iSecurity::escapeStr($_GET['ext']);
         iFS::check_ext($ext,0) OR iUI::json(array('state'=>'ERROR','msg'=>'不允许的文件类型'));
         iFS::$ERROR_TYPE = true;
-        $_GET['watermark'] OR iFile::$watermark = false;
+        $_GET['watermark'] OR files::$watermark = false;
         $F = iFS::IO($name,$udir,$ext);
         $F ===false && iUI::json(iFS::$ERROR);
         iUI::json(array(
@@ -96,14 +129,14 @@ class filesAdmincp{
      * @return [type] [description]
      */
     public function do_upload(){
-//iFile::$check_data = true;
-    	$_POST['watermark'] OR iFile::$watermark = false;
+//files::$check_data = true;
+    	$_POST['watermark'] OR files::$watermark = false;
         iFS::$ERROR_TYPE = true;
     	if($this->id){
-            iFS::$data = iFile::get('id',$this->id);
+            iFS::$data = files::get('id',$this->id);
             $F = iFS::upload('upfile');
             if($F && $F['size']!=iFS::$data->size){
-                iDB::query("update `#iCMS@__files` SET `size`='".$F['size']."' WHERE `id` = '$this->id'");
+                files::update_size($this->id,$F['size']);
             }
     	}else{
             $udir = ltrim($_POST['udir'],'/');
@@ -129,21 +162,21 @@ class filesAdmincp{
      * @return [type] [description]
      */
     public function do_download(){
-        iFile::$userid   = false;
+        files::$userid   = false;
         $rs            = iFS::get_filedata('id',$this->id);
         $FileRootPath  = iFS::fp($rs->filepath,"+iPATH");
         iFS::check_ext($rs->filepath,true) OR iUI::alert('文件类型不合法!');
-        iFile::$userid = members::$userid;
+        files::$userid = members::$userid;
         $fileresults   = iHttp::remote($rs->ofilename);
     	if($fileresults){
     		iFS::mkdir(dirname($FileRootPath));
     		iFS::write($FileRootPath,$fileresults);
-            iFile::$watermark = !isset($_GET['unwatermark']);
+            files::$watermark = !isset($_GET['unwatermark']);
             iFS::hook('write',array($FileRootPath,$rs->ext));
 
     		$_FileSize	= strlen($fileresults);
     		if($_FileSize!=$rs->size){
-	    		iDB::query("update `#iCMS@__files` SET `size`='$_FileSize' WHERE `id` = '$this->id'");
+                files::update_size($this->id,_FileSize);
     		}
     		iUI::success("{$rs->ofilename} <br />重新下载到<br /> {$rs->filepath} <br />完成",'js:1',3);
     	}else{
@@ -169,25 +202,19 @@ class filesAdmincp{
     public function do_del($id = null){
         $id ===null && $id = $this->id;
         $id OR iUI::alert("请选择要删除的文件");
-        $indexid = (int)$_GET['indexid'];
-        $sql     = isset($_GET['indexid'])?"AND `indexid`='$indexid'":"";
-        $rs      = iDB::row("SELECT * FROM `#iCMS@__files` WHERE `id` = '$id' {$sql} LIMIT 1;");
-    	if($rs){
-            $rs->filepath = rtrim($rs->path,'/').'/'.$rs->filename.'.'.$rs->ext;
-            $FileRootPath = iFS::fp($rs->filepath,"+iPATH");
-            iDB::query("DELETE FROM `#iCMS@__files` WHERE `id` = '$id' {$sql};");
-	    	if(iFS::del($FileRootPath)){
-                $msg = 'success:#:check:#:文件删除完成!';
-	    		$_GET['ajax'] && iUI::json(array('code'=>1,'msg'=>$msg));
-	    	}else{
-	    		$msg	= 'warning:#:warning:#:找不到相关文件,文件删除失败!<hr/>文件相关数据已清除';
-	    		$_GET['ajax'] && iUI::json(array('code'=>0,'msg'=>$msg));
-	    	}
-			iUI::dialog($msg,'js:parent.$("#tr'.$id.'").remove();');
-    	}
-    	$msg	= '文件删除失败!';
-    	$_GET['ajax'] && iUI::json(array('code'=>0,'msg'=>$msg));
-    	iUI::alert($msg);
+        // $indexid = (int)$_GET['indexid'];
+        // $indexid && $result  = files::index_fileid($indexid);
+
+        $result  = files::delete_file($id);
+        files::delete_fdb($id);
+        if($result){
+            $msg = 'success:#:check:#:文件删除完成!';
+            $_GET['ajax'] && iUI::json(array('code'=>1,'msg'=>$msg));
+        }else{
+             $msg = 'warning:#:warning:#:找不到相关文件,文件删除失败!<hr/>文件相关数据已清除';
+             $_GET['ajax'] && iUI::json(array('code'=>0,'msg'=>$msg));
+        }
+        iUI::dialog($msg,'js:parent.$("#tr'.$id.'").remove();');
     }
     /**
      * [创建目录]
@@ -255,7 +282,18 @@ class filesAdmincp{
             $file_ext = 'jpg';
         }
         if($_GET['indexid']){
-            $rs = iDB::all("SELECT * FROM `#iCMS@__files` where `indexid`='{$_GET['indexid']}' order by `id` ASC LIMIT 100");
+            $indexid = (int)$_GET['indexid'];
+            $msql = iSQL::in($indexid,'indexid',false,true);
+            $msql && $fids_array = iDB::all("SELECT `fileid` FROM ".files::$_MAP_TABLE." WHERE {$msql}");
+            $ids = iSQL::values($fids_array);
+            $ids = $ids ? $ids : '0';
+            $sql = " `id` IN({$ids})";
+            $rs = iDB::all("
+                SELECT * FROM ".files::$_DATA_TABLE."
+                WHERE {$sql}
+                ORDER BY `id` ASC
+                LIMIT 100
+            ");
             foreach ((array)$rs as $key => $value) {
                 $filepath = $value['path'] . $value['filename'] . '.' . $value['ext'];
                 $src[] = iFS::fp($filepath,'+http')."?".time();

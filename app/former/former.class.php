@@ -148,30 +148,38 @@ class former {
                     unset($attr['type']);
                     // $form_group.=' input-append';
                     $input  = self::widget('textarea',$attr)->css('height','150px');
-                    $picbtn = filesAdmincp::pic_btn($attr['id'],null,($type=='multi_file'?'文件':'图片'),true);
-                    $script = self::script('$("#'.$attr['id'].'").autoTextarea({maxHeight:300});',true);
+                    if(self::$config['gateway']=='admincp'){
+                        $picbtn = filesAdmincp::pic_btn($attr['id'],null,($type=='multi_file'?'文件':'图片'),true);
+                        $script = self::script('$("#'.$attr['id'].'").autoTextarea({maxHeight:300});',true);
+                    }
                     $input.= $picbtn;
                 break;
                 case 'image':
                 case 'file':
                     // $form_group.=' input-append';
                     $input->attr('type','text');
-                    $picbtn = filesAdmincp::pic_btn($attr['id'],null,($type=='file'?'文件':'图片'),true);
+                    if(self::$config['gateway']=='admincp'){
+                        $picbtn = filesAdmincp::pic_btn($attr['id'],null,($type=='file'?'文件':'图片'),true);
+                    }
                     $input.= $picbtn;
                 break;
                 case 'tpldir':
                 case 'tplfile':
                     // $form_group.=' input-append';
                     $input->attr('type','text');
-                    $click ='file';
-                    $type=='tpldir' && $click = 'dir';
-                    $modal = filesAdmincp::modal_btn($name,$attr['id'],$click);
+                    if(self::$config['gateway']=='admincp'){
+                        $click ='file';
+                        $type=='tpldir' && $click = 'dir';
+                        $modal = filesAdmincp::modal_btn($name,$attr['id'],$click);
+                    }
                     $input.= $modal;
                 break;
                 case 'txt_prop':
                     // $form_group.=' input-append';
                     $input->attr('type','text');
-                    $prop = propAdmincp::btn_group($name,self::$config['app']['app'],$attr['id']);
+                    if(self::$config['gateway']=='admincp'){
+                        $prop = propAdmincp::btn_group($name,self::$config['app']['app'],$attr['id']);
+                    }
                     $input.= $prop;
                 break;
                 case 'prop':
@@ -186,7 +194,9 @@ class former {
                     }
                     $select = self::widget('select',$attr)->addClass('chosen-select');
                     $option='<option value="0">默认'.$field['label'].'['.$name.'=\'0\']</option>';
-                    $option.= propAdmincp::get($name,null,'option',null,self::$config['app']['app']);
+                    if(self::$config['gateway']=='admincp'){
+                        $option.= propAdmincp::get($name,null,'option',null,self::$config['app']['app']);
+                    }
                     $value===null OR $script = self::script('iCMS.FORMER.select("'.$attr['id'].'","'.$value.'");',true);
                     $input = $select->html($option).$orig;
                 break;

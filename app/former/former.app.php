@@ -36,7 +36,8 @@ class formerApp{
                     $table    = reset($app['table']);
                     $id       = $rs[$table['primary']];
                     $union_key&& $primary_key = $union_key;
-                    $rs+= (array)iDB::row("SELECT * FROM `{$data_table['table']}` WHERE `{$primary_key}`='$id' LIMIT 1;",ARRAY_A);
+                    $urs = (array)iDB::row("SELECT * FROM `{$data_table['table']}` WHERE `{$primary_key}`='$id' LIMIT 1;",ARRAY_A);
+                    $urs && $rs+=$urs;
                 }
             }
             former::$template['class'] = array(

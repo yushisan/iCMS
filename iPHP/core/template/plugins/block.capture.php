@@ -6,21 +6,17 @@
  * Name:     capture
  * Purpose:  removes content and stores it in a variable
  */
-function tpl_block_capture($params, $content, &$tpl)
-{
+function tpl_block_capture($params, $content, &$tpl){
     if($content===null) return false;
 
 	extract($params);
 
-	if (isset($name)){
-		$buffer = $name;
-	}else{
-		$buffer = "'default'";
-	}
-
-	$tpl->_iVARS['capture'][$buffer] = $content;
 	if (isset($assign)){
 		$tpl->assign($assign, $content);
+	}else{
+		$key = 'default';
+		isset($name) && $key = $name;
+		$tpl->_vars['capture'][$key] = $content;
 	}
 	return true;
 }

@@ -22,8 +22,6 @@ class cacheAdmincp{
         }
         $this->do_menu(false);
         $this->do_category(false);
-        $this->do_article_category(false);
-        $this->do_tag_category(false);
         $this->do_tpl(false);
         iUI::success('全部缓存更新完成');
     }
@@ -51,8 +49,7 @@ class cacheAdmincp{
      * @return [type] [description]
      */
     public function do_category($dialog=true){
-    	$category = new category();
-    	$category->cache(true);
+    	category::cache();
     	$dialog && iUI::success('更新完成');
     }
     /**

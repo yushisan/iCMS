@@ -2,7 +2,7 @@
 /**
  * @author https://github.com/chuck911/qiniu-php
  */
-class QiniuYun
+class QiniuClient
 {
 	const UP_HOST  = 'http://up.qiniu.com';
 	const RS_HOST  = 'http://rs.qbox.me';
@@ -11,10 +11,10 @@ class QiniuYun
 	public $accessKey;
 	public $secretKey;
 
-	public function __construct($conf)
+	public function __construct($accessKey,$secretKey)
 	{
-		$this->accessKey = $conf['AccessKey'];
-		$this->secretKey = $conf['SecretKey'];
+		$this->accessKey = $accessKey;
+		$this->secretKey = $secretKey;
 	}
 
 	public function uploadFile($filePath,$bucket,$key=null)
@@ -147,10 +147,15 @@ class QiniuYun
 	    $info = curl_getinfo($ch);
 		curl_close($ch);
 
-		if($info['http_code']>=300)
-			throw new Exception($info['http_code'].': '.$result);
-		if($info['content_type']=='application/json')
+		if($info['http_code']>=300){
+	        return json_encode(array(
+	                'error' => $info['http_code'],
+	                'msg'   => json_decode($result,true)
+	        ));
+		}
+		if($info['content_type']=='application/json'){
 			return json_decode($result,true);
+		}
 
 		return $result;
 	}

@@ -82,24 +82,23 @@ class iView {
     public static function block_cache($vars, $content, $tpl) {
         $vars['id'] OR iUI::warning('cache 标签出错! 缺少"id"属性或"id"值为空.');
         $cache_time = isset($vars['time']) ? (int) $vars['time'] : -1;
-        $cache_name = iPHP_DEVICE . '/part/' . $vars['id'];
+        $cache_name = iPHP_DEVICE . '/block_cache/' . $vars['id'];
         $cache = iCache::get($cache_name);
+
         if (empty($cache)) {
             if ($content === null) {
-                return null;
+                return false;
             }
             $cache = $content;
             iCache::set($cache_name, $content, $cache_time);
-            unset($content);
         }
         if ($vars['assign']) {
             $tpl->assign($vars['assign'], $cache);
-            return ture;
+            return true;
         }
         if ($content === null) {
             return $cache;
         }
-        // return $cache;
     }
     /**
      * 模板路径

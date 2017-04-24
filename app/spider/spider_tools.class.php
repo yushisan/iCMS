@@ -536,8 +536,8 @@ class spider_tools {
             CURLOPT_FAILONERROR          => 1,
             CURLOPT_HEADER               => 0,
             CURLOPT_NOSIGNAL             => true,
-            CURLOPT_DNS_USE_GLOBAL_CACHE => true,
-            CURLOPT_DNS_CACHE_TIMEOUT    => 86400,
+            // CURLOPT_DNS_USE_GLOBAL_CACHE => true,
+            // CURLOPT_DNS_CACHE_TIMEOUT    => 86400,
             CURLOPT_SSL_VERIFYPEER       => false,
             CURLOPT_SSL_VERIFYHOST       => false
             // CURLOPT_FOLLOWLOCATION => 1,// 使用自动跳转

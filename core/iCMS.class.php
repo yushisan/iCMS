@@ -89,6 +89,14 @@ class iCMS {
             "avatar" => iCMS_FS_URL.'avatar/',
             "mobile" => $site['murl'],
         );
+        if(self::$config['template']['device']){
+            foreach (self::$config['template']['device'] as $key => $value) {
+                if($value['domain']){
+                    $name = trim($value['name']);
+                    $site['urls'][$name] = $value['domain'];
+                }
+            }
+        }
         iView::assign('site',$site);
         iUI::$dialog['title']  = $site['name'];
     }

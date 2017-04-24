@@ -44,8 +44,7 @@ function compile_include($arguments, &$object){
 				$output = '<?php include "'.$file.'"; ?>';
 			}
 		}else{
-			$file   = $object->_fetch_compile($include_file,'file');
-			$output = file_get_contents($file);
+			$output = $object->_fetch_compile($include_file,'code');
 		}
 	}
 	$object->_include_file = false;

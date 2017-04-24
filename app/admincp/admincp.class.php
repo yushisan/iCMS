@@ -14,6 +14,9 @@ define('__ADMINCP__', iPHP_SELF . '?app');
 define('ACP_PATH', iPHP_APP_DIR . '/admincp');
 define('ACP_HOST', (($_SERVER['SERVER_PORT'] == 443)?'https':'http')."://" . $_SERVER['HTTP_HOST']);
 
+$git_ver_file = iPHP_APP_CORE.'/git.version.php';
+file_exists($git_ver_file) && require_once $git_ver_file;
+
 class admincp {
 	public static $apps       = NULL;
 	public static $callback   = NULL;
@@ -40,7 +43,7 @@ class admincp {
 		members::check_login(); //用户登陆验证
 		members::check_priv('ADMINCP','page');//检查是否有后台权限
 
-		iFile::init(array(
+		files::init(array(
 			'userid'    => members::$userid,
 			'watermark' => iCMS::$config['watermark']
 		));

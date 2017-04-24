@@ -20,7 +20,7 @@ admincp::head();
         <input type="text" cid="{{cid}}" name="sortnum[{{cid}}]" value="{{sortnum}}" style="width:32px;"/>
     </span>
     <span class="name">
-        <input {{if rootid=="0"}}style="font-weight:bold"{{/if}} type="text" name="name[{{cid}}]" value="{{name}}"/>
+        <input class="span2" {{if rootid=="0"}}style="font-weight:bold"{{/if}} type="text" name="name[{{cid}}]" value="{{name}}"/>
         {{if status=="0"}}
         <i class="fa fa-eye-slash" title="隐藏<?php echo $this->category_name;?>"></i>
         {{/if}}

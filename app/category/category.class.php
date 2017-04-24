@@ -166,7 +166,7 @@ class category {
         }
         return $cid;
     }
-    public static function cache($one=false,$appid=null) {
+    public static function cache($appid=null) {
         $sql = self::init_sql($appid);
         $rs  = iDB::all("SELECT * FROM `#iCMS@__category` WHERE {$sql} ORDER BY `sortnum`  ASC");
         $hidden = array();
@@ -176,7 +176,7 @@ class category {
             $parent[$C['cid']]               = $C['rootid'];
             $rootid[$C['rootid']][$C['cid']] = $C['cid'];
             $app[$C['appid']][$C['cid']]     = $C['cid'];
-            self::cahce_item($C);
+            self::cahce_item($C);//临时缓存
         }
 
         foreach ((array)$app as $appid => $value) {

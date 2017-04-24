@@ -311,8 +311,8 @@ class spider{
             CURLOPT_HEADER               => false,
             CURLOPT_NOBODY               => false,
             CURLOPT_NOSIGNAL             => true,
-            CURLOPT_DNS_USE_GLOBAL_CACHE => true,
-            CURLOPT_DNS_CACHE_TIMEOUT    => 86400,
+            // CURLOPT_DNS_USE_GLOBAL_CACHE => true,
+            // CURLOPT_DNS_CACHE_TIMEOUT    => 86400,
             CURLOPT_SSL_VERIFYPEER       => false,
             CURLOPT_SSL_VERIFYHOST       => false
         );

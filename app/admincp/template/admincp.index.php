@@ -6,6 +6,10 @@
  */
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
+$version_url="http://www.idreamsoft.com/cms/version.php?callback=?"
+."&VERSION=".iCMS_VERSION
+."&RELEASE=".iCMS_RELEASE
+."&GIT_COMMIT=".GIT_COMMIT;
 ?>
 <div class="iCMS-container">
   <div class="row-fluid">
@@ -74,7 +78,7 @@ admincp::head();
       <table class="table table-bordered table-striped">
         <tr>
           <td>当前程序版本</td>
-          <td>iCMS <?php echo iCMS_VERSION ; ?>[<?php echo iCMS_RELEASE ; ?>]</td>
+          <td>iCMS <?php echo iCMS_VERSION ; ?>[<?php echo iCMS_RELEASE ; ?>][git:<?php echo substr(GIT_COMMIT,0,8) ; ?>]</td>
           <td><a href="<?php echo __ADMINCP__;?>=patch&do=check&force=1&frame=iPHP" target="iPHP_FRAME" id="home_patch">最新版本</a></td>
           <td><span id="iCMS_RELEASE"><img src="./app/admincp/ui/img/ajax_loader.gif" width="16" height="16" align="absmiddle"></span></td>
           <td><a href="<?php echo __ADMINCP__;?>=patch&do=git_check&git=true" data-toggle="modal" data-target="#iCMS-MODAL" data-meta="{&quot;width&quot;:&quot;85%&quot;,&quot;height&quot;:&quot;640px&quot;}" title="开发版信息">开发版信息</a></td>
@@ -220,13 +224,16 @@ admincp::head();
         <div class="widget-content nopadding">
           <form action="http://www.idreamsoft.com/cms/feedback.php" method="post" class="form-inline" id="iCMS-feedback" target="iPHP_FRAME">
             <textarea id="bug_content" name="content" class="tip" title="为了保证效率，请务必描述清楚你的问题，例如包含 iCMS 版本号、服务器操作系统、WEB服务器版本、浏览器版本等必要信息，不合格问题将可能会被无视掉" style="width:95%; height: 160px; margin:4px 0px 4px 10px;padding: 4px;">
+  出问题的URL:
+  问题描述:
+  -----------------------------------------------------------
   iCMS 版本号:iCMS <?php echo iCMS_VERSION ; ?>[<?php echo iCMS_RELEASE ; ?>]
+  开发版本信息:<?php echo GIT_COMMIT ; ?> [<?php echo GIT_TIME ; ?>]
   服务器操作系统:<?php echo PHP_OS ; ?>;
   WEB服务器版本:<?php echo $_SERVER['SERVER_SOFTWARE'] ; ?>;
   MYSQL版本:<?php echo iDB::version() ; ?>;
   浏览器版本:<?php echo $_SERVER['HTTP_USER_AGENT'] ; ?>;
-  出问题的URL:
-  问题描述:</textarea>
+  </textarea>
             <div class="clearfix mt10"></div>
             <button id="bug_button" class="btn btn-primary fr mr20" type="submit"><i class="fa fa-check"></i> 提交</button>
             <input id="bug_email" name="email" type="text" class="ml10" placeholder="您的邮箱">
@@ -240,7 +247,7 @@ admincp::head();
 <script type="text/javascript">
 $(function(){
 	window.setTimeout(function(){
-		$.getJSON("http://www.idreamsoft.com/cms/version.php?VERSION=<?php echo iCMS_VERSION ; ?>&RELEASE=<?php echo iCMS_RELEASE ; ?>&callback=?",
+		$.getJSON("<?php echo $version_url ; ?>",
 		    function(o){
             $('#iCMS_RELEASE').text(o.release);
             $('#iCMS_GIT').text(o.git);

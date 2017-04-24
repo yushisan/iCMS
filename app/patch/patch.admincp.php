@@ -110,7 +110,6 @@ class patchAdmincp{
     	include admincp::view("git.show");
     }
 	public static function git($do,$commit_id=null,$type='array') {
-		require_once iPHP_APP_CORE.'/git.version.php';
         $commit_id===null && $commit_id = GIT_COMMIT;
         $last_commit_id = $_GET['last_commit_id'];
 

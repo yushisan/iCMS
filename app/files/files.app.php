@@ -13,8 +13,8 @@ class filesApp {
 
     public function do_download(){
         $filename = iSecurity::escapeStr($_GET['file']);
-        iFile::config(iFS::$config['table']);
-        $data = iFile::get('filename',$filename);
+        files::config(iFS::$config['table']);
+        $data = files::get('filename',$filename);
         $url  = iFS::fp($data->filepath, '+http');
         $path = iFS::fp($data->filepath, '+iPATH');
         self::attachment($path,$data->ofilename);

@@ -192,6 +192,15 @@ class iTemplateLite {
 	function unregister_compiler($function){
 		unset($this->_plugins['compiler'][$function]);
 	}
+
+	function register_output($function, $implementation){
+		$this->_plugins['output'][$function] = $implementation;
+	}
+
+	function unregister_output($function){
+		unset($this->_plugins['output'][$function]);
+	}
+
 	function _get_resource($file){
 		if(strpos($file, 'debug.tpl')!==false) return 'debug.tpl';
 
@@ -252,37 +261,52 @@ class iTemplateLite {
 		$this->_include_file OR $this->_file = $file;
 
 		if (!is_file($compile_file)){
-			$iTC                            = new iTemplateLite_Compiler();
-			$iTC->left_delimiter            = $this->left_delimiter;
-			$iTC->right_delimiter           = $this->right_delimiter;
-			$iTC->template_callback         = $this->template_callback;
-			$iTC->plugins_dir               = &$this->plugins_dir;
-			$iTC->template_dir              = &$this->template_dir;
-			$iTC->compile_dir               = &$this->compile_dir;
-			$iTC->_vars                     = &$this->_vars;
-			$iTC->_plugins                  = &$this->_plugins;
-			$iTC->_linenum                  = &$this->_linenum;
-			$iTC->_file                     = &$this->_file;
-			$iTC->php_extract_vars          = &$this->php_extract_vars;
-			$iTC->reserved_template_varname = &$this->reserved_template_varname;
-			$iTC->_iVARS                = &$this->_iVARS;
-			$iTC->default_modifiers         = &$this->default_modifiers;
-			$output                         = $iTC->_compile_file($template_file);
-			$output = $this->callback('output',array($output,$file));
-			file_put_contents($compile_file,$output);
+			$compiler = new iTemplateLite_Compiler();
+			$compiler->left_delimiter            = $this->left_delimiter;
+			$compiler->right_delimiter           = $this->right_delimiter;
+			$compiler->template_callback         = $this->template_callback;
+			$compiler->plugins_dir               = &$this->plugins_dir;
+			$compiler->template_dir              = &$this->template_dir;
+			$compiler->compile_dir               = &$this->compile_dir;
+			$compiler->_vars                     = &$this->_vars;
+			$compiler->_plugins                  = &$this->_plugins;
+			$compiler->_linenum                  = &$this->_linenum;
+			$compiler->_file                     = &$this->_file;
+			$compiler->php_extract_vars          = &$this->php_extract_vars;
+			$compiler->reserved_template_varname = &$this->reserved_template_varname;
+			$compiler->_iVARS                    = &$this->_iVARS;
+			$compiler->default_modifiers         = &$this->default_modifiers;
+			$compile_code = $compiler->_compile_file($template_file);
+			if($ret==='code') return $compile_code;
+
+			file_put_contents($compile_file,$compile_code);
 		}
 		if($ret==='file') return $compile_file;
+
+		if($this->template_callback['output']||$this->_plugins['output']){
+			$ret = 'output';
+		}
 
 		$ret && ob_start();
 		include $compile_file;
 		if ($ret) {
 			$output = ob_get_contents();
 			ob_end_clean();
-//			$output = $this->callback('output',array($file,$output));
-			return $output;
+			if($ret == 'output'){
+				echo $this->output_callback($output,$compile_file);
+			}else{
+				return $output;
+			}
 		}
 	}
-
+	function output_callback($content,$file){
+		$content = $this->callback('output',array($content,$file));
+		foreach ((array)$this->_plugins['output'] as $key => $value) {
+			require_once $this->_get_plugin_dir('output.'.$key.'.php');
+			call_user_func_array($value, array(&$content,&$this));
+		}
+		return $content;
+	}
 	function _run_modifier(){
 		$arguments = func_get_args();
 		list($variable, $modifier, $php_function, $_map_array) = array_splice($arguments, 0, 4);
@@ -296,6 +320,12 @@ class iTemplateLite {
 			}else{
 				$variable = call_user_func_array($this->_plugins["modifier"][$modifier], $arguments);
 			}
+		}else{
+			if($php_function == "PHP"){
+				$variable = call_user_func_array($modifier, array(&$arguments));
+			}else{
+				$variable = call_user_func_array($this->_plugins["modifier"][$modifier], array(&$arguments));
+			}
 		}
 		return $variable;
 	}
@@ -304,8 +334,8 @@ class iTemplateLite {
 		return rtrim($dir,'/').'/';
 	}
 
-	function _get_plugin_dir($name){
-		return iTEMPLATE_DIR.$this->plugins_dir.'/';
+	function _get_plugin_dir($name=null){
+		return iTEMPLATE_DIR.$this->plugins_dir.'/'.$name;
 	}
 
 	function _destroy_dir($file){
@@ -328,16 +358,8 @@ class iTemplateLite {
 		}
 		trigger_error('TPL: [in ' . $this->_file . ' line ' . ($this->_linenum-1) . "]: syntax error: $error_msg$info", $error_type);
 	}
-    function require_one($path){
-		is_file($path) OR $this->trigger_error($path. " does not exist", E_USER_ERROR);
-		$key	= str_replace(iPATH,'iPHP://',$path);
-		//$key	= str_replace(array('/','.'),'_',$key);
-      	if(isset($GLOBALS['iPHP_REQ'][$key])) return;
-
-		$GLOBALS['iPHP_REQ'][$key] = true;
-		require $path;
-    }
 }
+// class iTemplateLite_Compiler extends iTemplateLite {
 class iTemplateLite_Compiler extends iTemplateLite {
 	// public configuration variables
 	public $left_delimiter            = "";
@@ -518,15 +540,21 @@ class iTemplateLite_Compiler extends iTemplateLite {
 		$compiled_text .= $text[$i];
 
 		foreach ($this->_require_stack as $key => $value){
-			$compiled_text = '<?php require_once \''. $this->_get_plugin_dir($key) . $key . '\'; $this->register_' . $value[0] . '("' . $value[1] . '", "' . $value[2] . '"); ?>' . $compiled_text;
+			if($value[0]=='output'){
+				$this->register_output($value[1], $value[2]);
+			}else{
+				$compiled_text = '<?php require_once \''. $this->_get_plugin_dir($key). '\';'
+				.'$this->register_' . $value[0] . '("' . $value[1] . '", "' . $value[2] . '"); ?>'
+				.$compiled_text;
+			}
 		}
-		unset($this->_require_stack);
 
 		// remove unnecessary close/open tags
 		$compiled_text = preg_replace('!\?>\n?<\?php!', "\n", $compiled_text);
 
 //2007-7-29 21:15 error_reporting/function_exists
 		$compiled_text = $this->_error_reporting.$compiled_text;
+
 		return $compiled_text;
 	}
 
@@ -785,13 +813,21 @@ class iTemplateLite_Compiler extends iTemplateLite {
 					return $_result;
 				}elseif ($this->_compile_custom_function($function, $modifiers, $arguments, $_result)){
 					return $_result;
+				}elseif ($this->_compile_custom_output($function, $arguments, $_result)){
+					return $_result;
 				}else{
 					$this->trigger_error($function." function does not exist", E_USER_ERROR, __FILE__, __LINE__);
 				}
 				break;
 		}
 	}
-
+	function _compile_custom_output($function, $arguments, &$_result){
+		if ($function = $this->_plugin_exists($function, "output")){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	function _compile_compiler_function($function, $arguments, &$_result){
 		if ($function = $this->_plugin_exists($function, "compiler")){
 			$_args   = $this->_parse_arguments($arguments);
@@ -1107,14 +1143,7 @@ class iTemplateLite_Compiler extends iTemplateLite {
 	}
 
 	function _plugin_exists($function, $type){
-		// check for object functions
-		//var_dump($this->_plugins);
 		$_plugins_fun = $this->_plugins[$type][$function];
-		// if(empty($_plugins_fun)){
-		// 	return false;
-		// }
-		// var_dump($_plugins_fun[0],class_exists($_plugins_fun[0]));
-
 		if (isset($_plugins_fun) &&
 			is_array($_plugins_fun) &&
 			class_exists($_plugins_fun[0]) &&
@@ -1132,7 +1161,7 @@ class iTemplateLite_Compiler extends iTemplateLite {
 		}
 		// check for a plugin in the plugin directory
 		$_plugins_file_name = $type . '.' . $function . '.php';
-		$pluginfile         = $this->_get_plugin_dir($_plugins_file_name).$_plugins_file_name;
+		$pluginfile         = $this->_get_plugin_dir($_plugins_file_name);
 		if(is_file($pluginfile)){
 			require_once $pluginfile;
 			$_plugins_fun_name = 'tpl_' . $type . '_' . $function;

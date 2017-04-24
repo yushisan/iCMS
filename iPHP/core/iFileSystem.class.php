@@ -469,12 +469,12 @@ class iFS {
 			list($RootPath, $FileDir) = self::mk_udir($udir); // 文件保存目录方式
 
 			if (self::$data) {
-				$fid        = self::$data->id;
-				$file_md5   = self::$data->filename;
-				$oFileName  = self::$data->ofilename;
-				$FileDir    = self::$data->path;
-				// $FileExt = self::$data->ext;
-				$FileSize   = self::$data->size;
+				$fid       = self::$data->id;
+				$file_md5  = self::$data->filename;
+				$oFileName = self::$data->ofilename;
+				$FileDir   = self::$data->path;
+				$FileExt   = self::$data->ext;
+				$FileSize  = self::$data->size;
 			} else {
 				$file_md5 = md5_file($tmp_file);
 				$frs = self::get_filedata('filename', $file_md5);

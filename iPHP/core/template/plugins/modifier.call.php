@@ -16,12 +16,15 @@
  */
 function tpl_modifier_call($object,$method){
     $arg_list = func_get_args ();
-    if(strpos($object,'::')===false){
-        $array    = array_slice($arg_list, 2);
-        $call     = array($object,$method);
-    }else{
-        $array    = array_slice($arg_list, 1);
-        $call     = $object;
+    if(strpos($method,'::')!==false){
+        $array = array_merge((array)$object,array_slice($arg_list, 2));
+        $call  = $method;
+    }else if(strpos($object,'::')!==false){
+        $array = array_slice($arg_list, 1);
+        $call  = $object;
+    }else {
+        $array = array_slice($arg_list, 2);
+        $call  = array($object,$method);
     }
 
 	if(!is_callable($call)) return;

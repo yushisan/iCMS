@@ -138,6 +138,46 @@
                                 <!--{$iCMS.PAGE.NAV}-->
                             </div>
                         </div>
+                        <!--{foreach value="catlist" from="$category_list"}-->
+                        <div class="tabs-pane hide" id="tabs_c<!--{$catlist.cid}-->">
+                            <div class="kwLink">
+                                <b>相关标签：</b>
+                                <!--{iCMS:tag:list loop="true" row="20" orderby="hot" cid="$catlist.cid"}-->
+                                <a href="<!--{$tag_list.url}-->" target="_blank">
+                                    <!--{$tag_list.name}-->
+                                </a>
+                                <!--{/iCMS}-->
+                            </div>
+                            <ul class="media-list">
+                                <!--{iCMS:article:list loop="true" tags="true" sub="all" row="12" cid="$catlist.cid"}-->
+                                <li class="media">
+                                    <!--{if $article_list.pic.url}-->
+                                    <a class="media-object" href="<!--{$article_list.url}-->">
+                                        <img class="r5 lazy" data-src="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.tpl}-->/static/img/loading.gif">
+                                    </a>
+                                    <!--{/if}-->
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                        <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a>
+                                        </h4>
+                                        <p class="media-text">
+                                            <!--{$article_list.description|cut:100:'......'}-->
+                                            <a href="<!--{$article_list.url}-->" target="_blank" class="blue">[详细]</a>
+                                        </p>
+                                        <div class="media-info">
+                                            <span class="date"><!--{$article_list.pubdate|date:'m月d日'}--></span>
+                                            <span class="category">[<!--{$article_list.category.link}-->]</span>
+                                            <!--{if $article_list.tags_link}-->
+                                            <span class="tags"><!--{$article_list.tags_link}--></span>
+                                            <!--{/if}-->
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <!--{/iCMS}-->
+                            </ul>
+                        </div>
+                        <!--{/foreach}-->
                         <div class="clearfix"></div>
                     </div>
                 </div>

@@ -526,7 +526,7 @@ form{margin-bottom:0;}
   #content-header .btn-group{ /* margin-top: 70px; FIX iPhone: Makes button group go needlessly far below the header. */ margin:10px 0; /* FIX iPhone: give equal margins (as below h1), still able to target with finger */left:30%;}
 
   /* *** */
-  #sidebar{float:none;width:100%!important;}
+  #sidebar{display: none;}
   #sidebar > a{padding:7px 20px 7px 15px;box-shadow:0 1px 0 #666666;margin-bottom:1px;display:block!important;text-transform:uppercase;color:#eeeeee;font-size:10px;}
   #sidebar > a > i{margin-right:10px;}
   #sidebar > ul{display:none;margin:-2px 0 0!important;width:100%!important;box-shadow:0 6px 6px rgba(0,0,0,0.4);}
@@ -537,6 +537,22 @@ form{margin-bottom:0;}
   .form-horizontal .control-label{padding-left:30px;}
   .form-horizontal .controls{margin-left:0;padding:10px 30px;}
   .form-actions{text-align:center;}
+  .widget-content {overflow-x:scroll;width: 98%;}
+  .widget-content .table {width: 1200px;}
+
+  .row-fluid{display: flex;
+  flex-direction: column;
+  justify-content: space-between;overflow-x:scroll;}
+ .row-fluid [class*="span"] {
+    width: 100%;
+ }
+ .iMenu-nav .divider-vertical{display: none;}
+ .dropdown-submenu>.dropdown-menu{    top:35px;
+    left: 0;}
+    #breadcrumb {width: 100%;overflow:hidden;height: 36px;}
+
+   .widget-title {overflow-x:scroll;width: 100%;overflow-y:hidden;}
+   .widget-title .nav-tabs {width: 1200px;}
 }
 @media (min-width:481px) and (max-width:767px){
   #sidebar{margin-top:40px;top:0px;}

@@ -144,13 +144,13 @@ class formsAdmincp{
         $table_array  = $_POST['table'];
         if($table_array){
           $table_array  = array_filter($table_array);
-          $table  = addslashes(json_encode($table_array));
+          $table  = addslashes(cnjson_decode($table_array));
         }
 
         $config_array = $_POST['config'];
         if($config_array){
           $config_array = array_filter($config_array);
-          $config       = addslashes(json_encode($config_array));
+          $config       = addslashes(cnjson_decode($config_array));
         }
 
         $fields   = '';
@@ -175,7 +175,7 @@ class formsAdmincp{
             }
           }
           //字段数据存入数据库
-          $fields = addslashes(json_encode($field_array));
+          $fields = addslashes(cnjson_decode($field_array));
         }
 
         iFS::$force_ext = "jpg";
@@ -214,13 +214,13 @@ class formsAdmincp{
               $table_array += apps_mod::data_create_table($addons_fieldata,$addons_name,$union_id);
               // //添加到字段数据里
               // $field_array = array_merge($field_array,$addons_base_fields);
-              // $array['fields'] = addslashes(json_encode($field_array));
+              // $array['fields'] = addslashes(cnjson_decode($field_array));
             }
             $array['table']  = $table_array;
             $array['config'] = $config_array;
 
-            $array['table'] = addslashes(json_encode($table_array));
-            $array['config'] = addslashes(json_encode($config_array));
+            $array['table'] = addslashes(cnjson_decode($table_array));
+            $array['config'] = addslashes(cnjson_decode($config_array));
 
             $id = iDB::insert('forms',$array);
 
@@ -265,10 +265,10 @@ class formsAdmincp{
                     $addons_base_fields = apps_mod::base_fields($array['app']);//xxx_data附加表的基础字段
                     $addons_fieldata = $addons_base_fields+$addons_fieldata;
                     $table_array += apps_mod::data_create_table($addons_fieldata,$addons_name,$union_id);
-                    $array['table'] = addslashes(json_encode($table_array));
+                    $array['table'] = addslashes(cnjson_decode($table_array));
                     // //添加到字段数据里
                     // $field_array = array_merge($field_array,$addons_base_fields);
-                    // $array['fields'] = addslashes(json_encode($field_array));
+                    // $array['fields'] = addslashes(cnjson_decode($field_array));
                   }
                 }
               }
@@ -276,7 +276,7 @@ class formsAdmincp{
                 //删除自定义表单的表
                 //不存在附加表数据 直接删除附加表 返回 table的json值 $table_array为引用参数
                 apps_mod::drop_table($addons_fieldata,$table_array,$addons_name);
-                $array['table'] = addslashes(json_encode($table_array));
+                $array['table'] = addslashes(cnjson_decode($table_array));
             }
 
             iDB::update('forms', $array, array('id'=>$id));

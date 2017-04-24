@@ -27,10 +27,13 @@ function callback(obj) {
 	}
 }
 </script>
+<style>
+.footer-debug{display: none;}
+</style>
 <?php if($this->from!='modal'){?>
-
 <div class="iCMS-container">
-  <?php } ?>
+<?php } ?>
+
   <?php if ($rs) { ?>
   <div class="widget-box<?php if($this->from=='modal'){?> widget-plain<?php } ?>" id="files-add">
     <div class="widget-title">
@@ -40,7 +43,7 @@ function callback(obj) {
       <table class="table table-bordered table-condensed table-hover">
         <tbody>
           <tr>
-            <td style="width:74px;">文 件 名</td>
+            <td style="width:69px;">文 件 名</td>
             <td><?php echo $rs->filename; ?>.<?php echo $rs->ext; ?></td>
           </tr>
           <tr>
@@ -77,7 +80,7 @@ function callback(obj) {
       </div>
     </div>
   </div>
-  <?php if($this->from!='modal'){?>
+<?php if($this->from!='modal'){?>
 </div>
 <?php } ?>
 <?php admincp::foot(); ?>

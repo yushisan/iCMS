@@ -12,6 +12,9 @@ $(function(){
 	<?php if($_GET['st']){ ?>
 	iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
 	<?php } ?>
+  <?php if($_GET['type']){ ?>
+  iCMS.select('type',"<?php echo $_GET['type'] ; ?>");
+  <?php } ?>
 	$("#<?php echo APP_FORMID;?>").batch({
     edit:function(checkbox){
       var pics = new Array();
@@ -53,11 +56,20 @@ $(function(){
             <option value="userid">用户ID</option>
             <option value="ofilename">源文件</option>
             <option value="size">文件大小</option>
+            <option value="path">路径</option>
+            <option value="ext">后缀名</option>
+          </select>
+        </div>
+        <div class="input-prepend"> <span class="add-on">类型</span>
+          <select name="type" id="type" class="span2 chosen-select">
+            <option value="0">上传</option>
+            <option value="1">远程下载</option>
+            <option value="3">数据流</option>
           </select>
         </div>
         <div class="clearfloat mb10"></div>
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
-          <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
+          <input type="text" name="keywords" class="span6" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
           <span class="add-on">每页</span>
           <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span>
@@ -114,7 +126,23 @@ $(function(){
                 <?php if($widget['index']){?>
                 <a class="btn btn-small" href="<?php echo __ADMINCP__;?>=files&do=index&fid=<?php echo $rs[$i]['id'] ; ?>"><i class="fa fa-search"></i> 关联</a>
                 <?php }?>
+                <?php if(iCMS::$config['cloud']['sdk']){?>
+                <div class="btn-group">
+                  <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span> 查看</a>
+                  <ul class="dropdown-menu">
+                    <?php
+                    foreach (iCMS::$config['cloud']['sdk'] as $sdk => $value) {
+                      $href = $value['domain'].'/'.ltrim($filepath,'/');
+                      iFS::checkHttp($href) OR $href = 'http://'.trim($href);
+                    ?>
+                    <li><a href="<?php echo $href; ?>" data-toggle="modal" title="查看<?php echo $sdk; ?>"><i class="fa fa-eye"></i> <?php echo $sdk; ?></a></li>
+                    <?php }?>
+                    <li><a href="<?php echo $href; ?>" data-toggle="modal" title="查看"><i class="fa fa-eye"></i> 本地</a></li>
+                  </ul>
+                </div>
+                <?php }else{?>
                 <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="查看"><i class="fa fa-eye"></i> 查看</a>
+                <?php }?>
                 <?php if(members::check_priv('files.editpic')){?>
                 <a class="btn btn-small" href="<?php echo __ADMINCP__;?>=files&frame=iPHP&do=editpic&from=modal&pic=<?php echo $filepath ; ?>" data-toggle="modal" title="编辑图片(<?php echo $rs[$i]['filename'].'.'.$rs[$i]['ext']; ?>)"><i class="fa fa-edit"></i> 编辑</a>
                 <?php }?>

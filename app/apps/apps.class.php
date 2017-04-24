@@ -44,7 +44,7 @@ class apps {
         //删除属性
         propAdmincp::del_app_data($app['id']);
         //删除文件
-        iFile::del_app_data($app['id']);
+        files::del_app_data($app['id']);
         //删除配置
         configAdmincp::del($app['id'],$app['app']);
         //删除表

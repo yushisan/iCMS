@@ -45,7 +45,7 @@ class keywordsApp {
         $content = str_replace($htmArray,$htmA,$content);
 
         // constructing mask(s)...
-        foreach ($array as $k=>$v) {
+        foreach ((array)$array as $k=>$v) {
             $search[$k]  = '@' .preg_quote($v[0],'@') . '@i';
             $replace[$k] = $v[1];
         }

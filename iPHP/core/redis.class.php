@@ -174,20 +174,25 @@ class Redis_client{
         $exp && $this->expire($name, $exp);
         return $this->get_response();
     }
-    public function get($name, $unserialize = true){
+    public function get($name){
         $this->write('GET', $name);
         $response = $this->get_response();
         if ($this->_have_zlib && $this->compress){
             $response = @gzuncompress($response);
         }
-        return ($unserialize && $response )
-            ? unserialize($response)
-            : $response;
+        $unresponse = unserialize($response);
+        if($unresponse && $response ){
+            $response = $unresponse;
+        }
+        return $response;
     }
-    public function get_multi($keys, $unserialize = true){
+    public function get_multi($keys){
         $this->write('MGET', $keys);
         $response = $this->get_response();
-        $unserialize && $response = array_map('unserialize',$response);
+        $unresponse = array_map('unserialize',$response);
+        if($unresponse && $response ){
+            $response = $unresponse;
+        }
         foreach($keys as $i =>$key){
             if ($this->_have_zlib && $this->compress){
                 $response[$i] = @gzuncompress($res[$i]);
@@ -206,13 +211,18 @@ class Redis_client{
         return $this->get_response();
     }
 
-    public function Rget($name, $unserialize = true)
+    public function Rget($name)
     {
         $this->write('GET', $name);
         $response = $this->get_response();
-        return ($unserialize && $response )
-            ? unserialize($response)
-            : $response;
+        if ($this->_have_zlib && $this->compress){
+            $response = @gzuncompress($response);
+        }
+        $unresponse = unserialize($response);
+        if($unresponse && $response ){
+            $response = $unresponse;
+        }
+        return $response;
     }
 
     public function getset($name, $value)
@@ -221,7 +231,7 @@ class Redis_client{
         return $this->get_response();
     }
 
-    public function mget($keys, $format = '', $unserialize = true)
+    public function mget($keys, $format = '')
     {
         if($format != ''){
             foreach($keys as $i =>$key){
@@ -229,9 +239,12 @@ class Redis_client{
             }
         }
         $this->write('MGET', $keys);
-        return $unserialize
-            ? array_map('unserialize', $this->get_response())
-            : $this->get_response();
+        $response = $this->get_response();
+        $unresponse = array_map('unserialize',$response);
+        if($unresponse && $response ){
+            $response = $unresponse;
+        }
+        return $response;
     }
 
     public function incr($name, $amount=1)

@@ -13,10 +13,15 @@ function compile_custom_block($function, $modifiers, $arguments, &$_result, &$ob
 	}else{
 		$start_tag = true;
 	}
-
+	$reference = false;
 	if ($function = $object->_plugin_exists($function, "block")){
 		if ($start_tag){
 			$_args = $object->_parse_arguments($arguments);
+			if(isset($_args['&'])){
+				$reference = true;
+				$ref_args = $_args['&'];
+			}
+
 			foreach($_args as $key => $value){
 				if (is_bool($value)){
 					$value = $value ? 'true' : 'false';
@@ -26,17 +31,21 @@ function compile_custom_block($function, $modifiers, $arguments, &$_result, &$ob
 				}
 				$_args[$key] = "'$key' => $value";
 			}
-			$_result = "<?php \$this->_tag_stack[] = array('$function', array(".implode(',', (array)$_args).")); ";
-			$_result .= '$_block_content = '.$function . '(array(' . implode(',', (array)$_args) .'), null, $this); ';
-			$_result .= 'if(!$_block_content){';
-			$_result .= 'ob_start(); ?>';
+			if($reference){
+				$_result = "<?php \$block_args = &".$ref_args.";";
+			}else{
+				$_result = "<?php \$block_args = array(".implode(',', (array)$_args).");";
+			}
+			$_result .= PHP_EOL.'$block_data = '.$function . '($block_args, null, $this); ';
+			$_result .= PHP_EOL.'if(!$block_data){';
+			$_result .= PHP_EOL.'ob_start(); ?>';
 		}else{
-			$_result .= '<?php $this->_block_content = ob_get_contents(); ob_end_clean(); ';
-			$_result .= 'if($_block_content===null){ $_block_content = $this->_block_content; } ';
-			$_result .= $function . '($this->_tag_stack[count($this->_tag_stack) - 1][1], $this->_block_content, $this); ';
-			$modifiers && $_result .= '$this->_block_content = ' . $object->_parse_modifier('$this->_block_content', $modifiers) . '; ';
-			$_result .= '} ';
-			$_result .= 'echo $_block_content; array_pop($this->_tag_stack); ?>';
+			$_result .= PHP_EOL.'<?php $block_content = ob_get_contents(); ob_end_clean(); ';
+			$_result .= PHP_EOL.'$block_data = '.$function . '($block_args, $block_content, $this);';
+			$modifiers && $_result .= PHP_EOL.'$block_content = ' . $object->_parse_modifier('$block_content', $modifiers) . '; ';
+			$_result .= PHP_EOL.'}?>';
+			$_result .= PHP_EOL.'<?php if($block_data!==true){ echo $block_content;} ?>';
+			$_result .= PHP_EOL.'<?php unset($block_args,$block_data,$block_content);?>';
 		}
 		return true;
 	}else{

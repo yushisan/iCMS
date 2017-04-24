@@ -8,7 +8,7 @@ defined('iPHP') OR exit('What are you doing?');
 admincp::head();
 ?>
 <script type="text/javascript">
-window.catchRemoteImageEnable = <?php echo iCMS::$config['catch_remote']=="1"?'true':'false';?>;
+window.catchRemoteImageEnable = <?php echo iCMS::$config['article']['catch_remote']?'true':'false';?>;
 </script>
 <script type="text/javascript" charset="utf-8" src="./app/admincp/ui/iCMS.ueditor.js"></script>
 <script type="text/javascript" charset="utf-8" src="./app/admincp/ui/ueditor/ueditor.all.min.js"></script>
@@ -269,10 +269,9 @@ function _modal_dialog(cancel_text){
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">出 处</span>
-              <input type="text" name="source" class="span6" id="source" value="<?php echo $rs['source'] ; ?>"/>
+              <input type="text" name="source" class="span2" id="source" value="<?php echo $rs['source'] ; ?>"/>
               <?php echo propAdmincp::btn_group("source");?>
             </div>
-            <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">作 者</span>
               <input type="text" name="author" class="span2" id="author" value="<?php echo $rs['author'] ; ?>"/>
               <?php echo propAdmincp::btn_group("author");?>
@@ -369,21 +368,19 @@ function _modal_dialog(cancel_text){
               <input name="ischapter" type="checkbox" id="ischapter" value="1" <?php if($rs['chapter']) echo 'checked="checked"'  ?>/>
               章节模式</span>
               <span class="add-on wauto">
-              <input name="inbox" type="checkbox" id="inbox" value="1" <?php if($rs['status']=="0")echo 'checked="checked"'  ?>/>
-              存为草稿</span>
-              <span class="add-on wauto">
               <input name="remote" type="checkbox" id="remote" value="1" <?php if(self::$config['remote']=="1")echo 'checked="checked"'  ?>/>
-              下载远程图片</span><span class="add-on wauto">
+              下载远程图片</span>
+              <span class="add-on wauto">
               <input name="autopic" type="checkbox" id="autopic" value="1" <?php if(self::$config['autopic']=="1")echo 'checked="checked"'  ?>/>
-              提取缩略图 </span><span class="add-on wauto">
+              提取缩略图 </span>
+              <span class="add-on wauto">
               <input name="dellink" type="checkbox" id="dellink" value="1"/>
-              清除链接 </span>  <span class="add-on wauto">
-              <input name="isredirect" type="checkbox" id="isredirect" value="1" />
-              增强图片下载 </span>
+              清除链接
+              </span>
               <?php if(iCMS::$config['watermark']['enable']=="1"){ ?>
               <span class="add-on wauto">
-              <input name="iswatermark" type="checkbox" id="iswatermark" value="1" />
-              不添加水印</span>
+                <input name="iswatermark" type="checkbox" id="iswatermark" value="1" />不添加水印
+              </span>
               <?php }?>
             </div>
             <div class="clearfloat mb10"></div>

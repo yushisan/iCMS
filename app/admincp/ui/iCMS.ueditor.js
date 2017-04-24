@@ -41,9 +41,9 @@
     ,initialFrameHeight:520  //初始化编辑器高度,默认320
 
     //启用自动保存
-    //,enableAutoSave: true
+    ,enableAutoSave: true
     //自动保存间隔时间， 单位ms
-    //,saveInterval: 500
+    ,saveInterval: 500
 
     //,imagePopup:true      //图片操作的浮层开关，默认打开
 

@@ -282,6 +282,7 @@ class iUI {
 				'PN'      => $iPages->nowindex,
 				'PREV'    => $iPages->prev_page(),
 				'NEXT'    => $iPages->next_page(),
+				'LAST'    => ($iPages->nowindex>=$iPages->totalpage),
 			);
 			iView::$handle->_iVARS['PAGES'] = $iPages;
 		}

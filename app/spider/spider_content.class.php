@@ -183,9 +183,7 @@ class spider_content {
                 iUI::alert($emptyMsg);
             }
         }
-        if ($data['json_decode']) {
-            $content = json_decode($content,true);
-        }
+
         if (spider::$callback['content'] && is_callable(spider::$callback['content'])) {
             $content = call_user_func_array(spider::$callback['content'],array($content));
         }

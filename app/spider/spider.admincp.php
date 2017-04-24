@@ -306,8 +306,8 @@ class spiderAdmincp {
 	 * @return [type] [description]
 	 */
 	public function do_import_rule() {
-        iFile::$check_data        = false;
-        iFile::$cloud_enable      = false;
+        files::$check_data        = false;
+        files::$cloud_enable      = false;
         iFS::$config['allow_ext'] = 'txt';
 		$F = iFS::upload('upfile');
 		$path = $F['RootPath'];
@@ -579,8 +579,8 @@ class spiderAdmincp {
 	 * @return [type] [description]
 	 */
     public function do_import_project(){
-        iFile::$check_data        = false;
-        iFile::$cloud_enable      = false;
+        files::$check_data        = false;
+        files::$cloud_enable      = false;
         iFS::$config['allow_ext'] = 'txt';
         $F    = iFS::upload('upfile');
         $path = $F['RootPath'];
