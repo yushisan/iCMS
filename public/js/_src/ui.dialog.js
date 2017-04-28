@@ -11,7 +11,7 @@ iCMS.define("ui.dialog", function(require) {
                 fixed: true,
                 autofocus: false,
                 quickClose: true,
-                lock: true,
+                modal: true,
                 time: null,
                 label: 'success',
                 icon: 'check',
@@ -22,7 +22,7 @@ iCMS.define("ui.dialog", function(require) {
 
         if (opts.follow) {
             opts.fixed = false;
-            opts.lock = false;
+            opts.modal = false;
             opts.skin = 'iCMS_tooltip_popup'
             opts.className = 'ui-popup';
             opts.backdropOpacity = 0;
@@ -44,7 +44,7 @@ iCMS.define("ui.dialog", function(require) {
             __callback('remove');
         };
         var d = artdialog(opts);
-        if (opts.lock) {
+        if (opts.modal) {
             d.showModal();
             // $(d.backdrop).addClass("ui-popup-overlay").click(function(){
             //     d.close().remove();

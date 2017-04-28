@@ -1,9 +1,12 @@
-<?php /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
 ?>
@@ -173,7 +176,7 @@ $(function(){
             <div class="input-prepend"> <span class="add-on">绑定域名</span>
               <input type="text" name="domain" class="span3" id="domain" value="<?php echo $rs['domain'] ; ?>"/>
             </div>
-            <span class="help-inline">例 http://test.idreamsoft.com</span>
+            <span class="help-inline">例 http://test.icmsdev.com</span>
             <div class="clearfloat mb10"></div>
             <div id="mode-box" class="<?php if(!$rs['mode']){ echo ' hide';}?>">
               <div class="input-prepend"> <span class="add-on">静态目录</span>

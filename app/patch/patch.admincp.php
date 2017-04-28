@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 
@@ -81,14 +81,14 @@ class patchAdmincp{
      * [开发版升级检查]
      */
     public function do_git_check(){
-    	$log =  patchAdmincp::git('log');
+    	$log =  patch::git('log');
     	include admincp::view("git.log");
     }
     /**
      * [下载开发版升级包]
      */
     public function do_git_download(){
-    	$zip_url = patchAdmincp::git('zip',null,'url');
+    	$zip_url = patch::git('zip',null,'url');
 		$release = $_GET['release'];
 		$zipName = str_replace(patch::PATCH_URL.'/', '', $zip_url);
 
@@ -101,7 +101,7 @@ class patchAdmincp{
      * [查看开发版信息]
      */
     public function do_git_show(){
-    	$log =  patchAdmincp::git('show',$_GET['commit_id']);
+    	$log =  patch::git('show',$_GET['commit_id']);
         $type_map = array(
           'D'=>'删除',
           'A'=>'增加',
@@ -109,30 +109,17 @@ class patchAdmincp{
         );
     	include admincp::view("git.show");
     }
-	public static function git($do,$commit_id=null,$type='array') {
-        $commit_id===null && $commit_id = GIT_COMMIT;
-        $last_commit_id = $_GET['last_commit_id'];
 
-		$url = patch::PATCH_URL . '/git?do='.$do.'&commit_id=' .$commit_id.'&last_commit_id=' .$last_commit_id. '&t=' . time();
-// 		$url = patch::PATCH_URL . '/git?do='.$do.'&commit_id=7e54fae6d0625f32&t=' . time();
-// var_dump($url);
-// exit;
-		$data = iHttp::remote($url);
-		if($type=='array'){
-			if($data){
-				return json_decode($data,true);
-			}
-			return array();
-		}else{
-			if($data){
-				return $data;
-			}
-			if($type=='json'){
-				return '[]';
-			}
-		}
-	}
-    public static function check_js() {
-        include admincp::view("check","patch");
+    public static function check_update() {
+        include admincp::view("check_update","patch");
+    }
+    /**
+     * [检查版信息]
+     */
+    public static function do_version() {
+        echo patch::version();
+    }
+    public static function check_version() {
+        include admincp::view("check_version","patch");
     }
 }

@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 class spider{
     public static $cid      = null;
@@ -301,7 +301,7 @@ class spider{
             // CURLOPT_HTTPHEADER           => array(
             //     'Content-Type:application/x-www-form-urlencoded',
             //     'Content-Length:'.strlen($data),
-            //     'Host: icms.idreamsoft.com'
+            //     'Host: www.icmsdev.com'
             // ),
             CURLOPT_POST                 => 1,
             CURLOPT_TIMEOUT              => 10,

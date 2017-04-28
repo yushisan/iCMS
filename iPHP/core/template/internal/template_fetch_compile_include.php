@@ -6,13 +6,14 @@
  * Name:	 template_fetch_compile_include
  */
 
-function template_fetch_compile_include($_templatelite_include_file, $_templatelite_include_vars, &$object)
-{
+function template_fetch_compile_include($_templatelite_include_file, $_templatelite_include_vars, &$object){
 	if ($object->debugging){
-		$object->_templatelite_debug_info[] = array('type'	  => 'template',
-											'filename'  => $_templatelite_include_file,
-											'depth'	 => ++$object->_inclusion_depth,
-											'exec_time' => array_sum(explode(' ', microtime())) );
+		$object->_templatelite_debug_info[] = array(
+			'type'      => 'template',
+			'filename'  => $_templatelite_include_file,
+			'depth'     => ++$object->_inclusion_depth,
+			'exec_time' => array_sum(explode(' ', microtime()))
+		);
 		$included_tpls_idx = count($object->_templatelite_debug_info) - 1;
 	}
 

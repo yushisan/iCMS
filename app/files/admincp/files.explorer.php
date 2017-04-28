@@ -1,9 +1,12 @@
-<?php /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 admincp::head($navbar);
 ?>
@@ -45,7 +48,7 @@ $(function(){
   		iCMS.dialog({
           follow:this,height:'auto',
           content:document.getElementById('mkdir-box'),
-          lock:false,
+          modal:false,
   		    title: '创建新目录',
           okValue:'创建',
           ok: function () {

@@ -1,8 +1,11 @@
-<?php /**
-* @package iCMS
-* @copyright 2007-2017, iDreamSoft
-* @license http://www.idreamsoft.com iDreamSoft
-* @author coolmoo <idreamsoft@qq.com>
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
@@ -10,6 +13,7 @@ admincp::head();
 <style type="text/css">
 #field-default .add-on { width: 70px;text-align: right; }
 .iCMS_dialog .ui-dialog-content .chosen-container{position: relative;}
+.add_table_item{vertical-align: top;margin-top: 5px;}
 </style>
 <script type="text/javascript">
 $(function(){
@@ -171,8 +175,10 @@ $(function(){
             </div>
             <div class="clearfloat mb10"></div>
             <h3 class="title" style="width:620px;">
-              数据表
-              <a class="add_table_item hide type_3" href="javascript:;" title="添加"><i class="fa fa-plus-square"></i> 添加</a>
+              <span>数据表</span>
+              <button type="button" class="btn btn-link add_table_item hide type_3">
+                <i class="fa fa-plus-square"></i> 添加
+              </button>
             </h3>
             <table class="table table-bordered bordered" style="width:600px;">
               <thead>

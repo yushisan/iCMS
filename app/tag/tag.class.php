@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 
 class tag {
     public static $appid      = '1';
@@ -84,7 +86,7 @@ class tag {
             }
 
 	    }else {
-			$tkey   = iPinyin::get($name,iCMS::$config['other']['py_split']);
+			$tkey   = iPinyin::get($name,iCMS::$config['tag']['tkey']);
 			$data   = compact(array(
                 'uid', 'cid', 'tcid', 'pid', 'tkey', 'name',
                 'seotitle', 'subtitle', 'keywords', 'description',

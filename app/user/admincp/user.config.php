@@ -1,8 +1,11 @@
-<?php /**
-* @package iCMS
-* @copyright 2007-2017, iDreamSoft
-* @license http://www.idreamsoft.com iDreamSoft
-* @author coolmoo <idreamsoft@qq.com>
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 configAdmincp::head("用户系统设置");
@@ -90,7 +93,7 @@ configAdmincp::head("用户系统设置");
     <span class="add-on"style="width:60px;">回调域名:</span>
     <input type="text" name="config[open][WX][redirect]" class="span3" id="wx_redirect" value="<?php echo $config['open']['WX']['redirect'] ; ?>"/>
 </div>
-<span class="help-inline">例:http://www.idreamsoft.com</span>
+<span class="help-inline">例:https://www.icmsdev.com</span>
 <hr />
 <h3 class="title">QQ开放平台</h3>
 <span class="help-inline">申请地址:http://connect.qq.com</span>
@@ -109,7 +112,7 @@ configAdmincp::head("用户系统设置");
     <span class="add-on"style="width:60px;">回调域名:</span>
     <input type="text" name="config[open][QQ][redirect]" class="span3" id="qq_redirect" value="<?php echo $config['open']['QQ']['redirect'] ; ?>"/>
 </div>
-<span class="help-inline">例:http://www.idreamsoft.com</span>
+<span class="help-inline">例:https://www.icmsdev.com</span>
 <hr />
 <h3 class="title">微博开放平台</h3>
 <span class="help-inline">申请地址:http://open.weibo.com/authentication</span>
@@ -128,7 +131,7 @@ configAdmincp::head("用户系统设置");
     <span class="add-on"style="width:60px;">回调域名:</span>
     <input type="text" name="config[open][WB][redirect]" class="span3" id="WB_redirect" value="<?php echo $config['open']['WB']['redirect'] ; ?>"/>
 </div>
-<span class="help-inline">例:http://www.idreamsoft.com</span>
+<span class="help-inline">例:https://www.icmsdev.com</span>
 <hr />
 <h3 class="title">淘宝开放平台</h3>
 <span class="help-inline">申请地址:http://open.taobao.com</span>
@@ -147,5 +150,5 @@ configAdmincp::head("用户系统设置");
     <span class="add-on"style="width:60px;">回调域名:</span>
     <input type="text" name="config[open][TB][redirect]" class="span3" id="TB_redirect" value="<?php echo $config['open']['TB']['redirect'] ; ?>"/>
 </div>
-<span class="help-inline">例:http://www.idreamsoft.com</span>
+<span class="help-inline">例:https://www.icmsdev.com</span>
 <?php configAdmincp::foot();?>

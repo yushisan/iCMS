@@ -132,8 +132,8 @@ class iUI {
 		self::$dialog = array(
 			'id'         => iPHP_APP.'-DIALOG-ALERT',
 			'skin'       => iPHP_APP.'_dialog_alert',
-			'lock'       => true,
-			'quickClose' => false,
+			'modal'      => true,
+			'quickClose' => true,
 			'width'      => 360,
 			'height'     => 120,
 		);
@@ -143,8 +143,8 @@ class iUI {
 		self::$dialog = array(
 			'id'         => iPHP_APP.'-DIALOG-ALERT',
 			'skin'       => iPHP_APP.'_dialog_alert',
-			'lock'       => true,
-			'quickClose' => false,
+			'modal'      => true,
+			'quickClose' => true,
 			'width'      => 360,
 			'height'     => 120,
 		);
@@ -171,7 +171,7 @@ class iUI {
 			"time:null","api:'iPHP'",
 			"id:'" . (self::$dialog['id'] ? self::$dialog['id'] : 'iPHP-DIALOG'). "'",
 			"title:'" . (self::$dialog['title'] ? self::$dialog['title'] : iPHP_APP) . " - {$title}'",
-			"lock:" . (self::$dialog['lock'] ? 'true' : 'false'),
+			"modal:" . (self::$dialog['modal'] ? 'true' : 'false'),
 			"width:'" . (self::$dialog['width'] ? self::$dialog['width'] : 'auto') . "'",
 			"height:'" . (self::$dialog['height'] ? self::$dialog['height'] : 'auto') . "'",
 		);

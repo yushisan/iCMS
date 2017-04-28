@@ -25,6 +25,12 @@ iCMS.define("passport", function(require) {
             });
             this.__post(param);
         },
+        FINDPWD: function(param) {
+            param = $.extend(param, {
+                'action': 'findpwd'
+            });
+            this.__post(param);
+        },
         CHECK: function(param, SUCCESS, FAIL) {
             var me = this;
             $.get(API.url('user', "&do=check"), param, function(ret) {

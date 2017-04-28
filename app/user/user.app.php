@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 
 class userApp {
@@ -69,7 +71,7 @@ class userApp {
 		$this->__user(true);
 		$category && $u['category'] = user::category((int) $_GET['cid'], iCMS_APP_ARTICLE);
 		iView::append('user', $u, true);
-		iView::render('iCMS://user/home.htm');
+		iView::display('iCMS://user/home.htm');
 	}
 	public function API_fans() {
 		$this->API_home();
@@ -96,7 +98,7 @@ class userApp {
 			in_array($funname, $class_methods) && $this->$funname();
 			iView::assign('pg', $pg);
 			iView::assign('pg_file', "./manage/$pg.htm");
-			iView::render("iCMS://user/manage.htm");
+			iView::display("iCMS://user/manage.htm");
 		}
 	}
 
@@ -370,7 +372,7 @@ class userApp {
 			if ($pg == 'base') {
 				iView::assign('userdata', (array) user::data(user::$userid));
 			}
-			iView::render("iCMS://user/profile.htm");
+			iView::display("iCMS://user/profile.htm");
 		}
 	}
 	/**
@@ -878,33 +880,33 @@ class userApp {
 		}
 	}
 	public function API_check() {
-		$name = iSecurity::escapeStr($_GET['name']);
+		$name  = iSecurity::escapeStr($_GET['name']);
 		$value = iSecurity::escapeStr($_GET['value']);
 		$a = iUI::code(1, '', $name);
 		switch ($name) {
-		case 'username':
-			if (!preg_match("/^[\w\-\.]+@[\w\-]+(\.\w+)+$/i", $value)) {
-				$a = iUI::code(0, 'user:register:username:error', 'username');
-			} else {
-				if (user::check($value, 'username')) {
-					$a = iUI::code(0, 'user:register:username:exist', 'username');
+			case 'username':
+				if (!preg_match("/^[\w\-\.]+@[\w\-]+(\.\w+)+$/i", $value)) {
+					$a = iUI::code(0, 'user:register:username:error', 'username');
+				} else {
+					if (user::check($value, 'username')) {
+						$a = iUI::code(0, 'user:register:username:exist', 'username');
+					}
 				}
-			}
 			break;
-		case 'nickname':
-			if (preg_match("/\d/", $value[0]) || cstrlen($value) > 20 || cstrlen($value) < 4) {
-				$a = iUI::code(0, 'user:register:nickname:error', 'nickname');
-			} else {
-				if (user::check($value, 'nickname')) {
-					$a = iUI::code(0, 'user:register:nickname:exist', 'nickname');
+			case 'nickname':
+				if (preg_match("/\d/", $value[0]) || cstrlen($value) > 20 || cstrlen($value) < 4) {
+					$a = iUI::code(0, 'user:register:nickname:error', 'nickname');
+				} else {
+					if (user::check($value, 'nickname')) {
+						$a = iUI::code(0, 'user:register:nickname:exist', 'nickname');
+					}
 				}
-			}
 			break;
-		case 'password':
-			strlen($value) < 6 && $a = iUI::code(0, 'user:password:error', 'password');
+			case 'password':
+				strlen($value) < 6 && $a = iUI::code(0, 'user:password:error', 'password');
 			break;
-		case 'seccode':
-			iSeccode::check($value) OR $a = iUI::code(0, 'iCMS:seccode:error', 'seccode');
+			case 'seccode':
+				iSeccode::check($value) OR $a = iUI::code(0, 'iCMS:seccode:error', 'seccode');
 			break;
 		}
 		iUI::json($a);
@@ -914,9 +916,9 @@ class userApp {
 		if (iCMS::$config['user']['register']['enable']) {
 			iPHP::set_cookie('forward', $this->forward);
 			user::status($this->forward, "login");
-			iView::render('iCMS://user/register.htm');
+			iView::display('iCMS://user/register.htm');
 		} else {
-			iView::render('iCMS://user/register.close.htm');
+			iView::display('iCMS://user/register.close.htm');
 		}
 	}
 	public function API_data($uid = 0) {
@@ -961,9 +963,9 @@ class userApp {
 			unset($user->password);
 			iView::assign('auth', $auth);
 			iView::assign('user', (array) $user);
-			iView::render('iCMS://user/resetpwd.htm');
+			iView::display('iCMS://user/resetpwd.htm');
 		} else {
-			iView::render('iCMS://user/findpwd.htm');
+			iView::display('iCMS://user/findpwd.htm');
 		}
 	}
 	public function API_login() {
@@ -971,9 +973,9 @@ class userApp {
 			$this->openid();
 			iPHP::set_cookie('forward', $this->forward);
 			user::status($this->forward, "login");
-			iView::render('iCMS://user/login.htm');
+			iView::display('iCMS://user/login.htm');
 		} else {
-			iView::render('iCMS://user/login.close.htm');
+			iView::display('iCMS://user/login.close.htm');
 		}
 	}
 	public function API_config() {
@@ -1021,7 +1023,7 @@ class userApp {
 	}
 	public function API_collections() {
 
-		//iView::render('iCMS://user/card.htm');
+		//iView::display('iCMS://user/card.htm');
 	}
 	public function API_ucard() {
 		$this->__user(true);
@@ -1029,7 +1031,7 @@ class userApp {
 			$secondary = $this->__secondary();
 			iView::assign('secondary', $secondary);
 		}
-		iView::render('iCMS://user/user.card.htm');
+		iView::display('iCMS://user/user.card.htm');
 	}
 
 	private function __secondary() {
@@ -1117,7 +1119,7 @@ class userApp {
 					$user['platform'] = $platform;
 					$open->cleancookie();
 					iView::assign('user', $user);
-					iView::render('iCMS://user/login.htm');
+					iView::display('iCMS://user/login.htm');
 				} else {
 					$user = $open->get_user_info();
 					$user['openid'] = $open->openid;
@@ -1126,7 +1128,7 @@ class userApp {
 
 					iView::assign('user', $user);
 					iView::assign('query', compact(array('sign', 'code', 'state', 'bind')));
-					iView::render('iCMS://user/register.htm');
+					iView::display('iCMS://user/register.htm');
 				}
 				exit;
 			}

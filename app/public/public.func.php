@@ -1,15 +1,16 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 class publicFunc{
 	public static function public_ui($vars=null){
-		$dir = isset($vars['dir'])?$vars['dir'].'/':'';
-		iView::assign("ui",$vars);
-		echo iView::render("iCMS://{$dir}public.ui.htm");
+		iView::assign("public",$vars);
+		iView::display("iCMS://public.ui.htm");
 	}
 	public static function public_seccode($vars=null){
 		echo publicApp::seccode();

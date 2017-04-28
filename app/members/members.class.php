@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 class members{
     const SUPERADMIN_UID ="1";
@@ -76,10 +76,13 @@ class members{
                 iPHP::set_cookie(self::$AUTH,authcode($a.$sep.$p,'ENCODE'));
             }
         }
-        return self::gateway($c);
+        return self::result($c);
     }
-
-	public static function gateway($s=null){
+    public static function gateway($way){
+        self::$GATEWAY = $way;
+        return new self();
+    }
+	private static function result($s=null){
         $s OR self::logout();
         switch (self::$GATEWAY) {
             case 'ajax':

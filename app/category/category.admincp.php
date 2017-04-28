@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 
@@ -271,11 +271,15 @@ class categoryAdmincp {
                 }
                 iUI::success('更新完成!','js:1');
             break;
-            case 'name':
+            case 'update':
                 foreach($id_array as $k=>$cid){
-                    $name   = iSecurity::escapeStr($_POST['name'][$cid]);
-                    iDB::query("UPDATE `#iCMS@__category` SET `name` = '$name' WHERE `cid` ='".(int)$cid."' LIMIT 1");
-                    //$this->cahce_item($cid);
+                    $name = iSecurity::escapeStr($_POST['name'][$cid]);
+                    $dir = iSecurity::escapeStr($_POST['dir'][$cid]);
+                    iDB::query("
+                        UPDATE `#iCMS@__category`
+                        SET `name` = '$name',`dir` = '$dir'
+                        WHERE `cid` ='".(int)$cid."' LIMIT 1
+                    ");
                 }
                 iUI::success('更新完成!','js:1');
             break;

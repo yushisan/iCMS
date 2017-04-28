@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 class articleApp {
 	public $methods = array('iCMS', 'article', 'clink', 'hits','vote', 'good', 'bad', 'like_comment', 'comment');
 	public static $pregimg = "/<img.*?src\s*=[\"|'|\s]*((http|https):\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is";
@@ -14,12 +16,18 @@ class articleApp {
 	}
 
 	public function do_iCMS($a = null) {
-		return $this->article((int) $_GET['id'], isset($_GET['p']) ? (int) $_GET['p'] : 1);
+		$v = (int) $_GET['id'];
+		$p = isset($_GET['p']) ? (int) $_GET['p'] : 1;
+		$f = 'id';
+		if(isset($_GET['clink'])){
+			$v = iSecurity::escapeStr($_GET['clink']);
+			$f = 'clink';
+		}
+		return $this->article($v,$p,$f);
 	}
+
 	public function do_clink($a = null) {
-		$clink = iSecurity::escapeStr($_GET['clink']);
-		$id = iDB::value("SELECT `id` FROM `#iCMS@__article` WHERE `clink`='" . $clink . "' AND `status` ='1';");
-		return $this->article((int) $id, isset($_GET['p']) ? (int) $_GET['p'] : 1);
+		return $this->do_iCMS($a);
 	}
 	public function API_iCMS() {
 		return $this->do_iCMS();
@@ -44,7 +52,7 @@ class articleApp {
 		$appid = (int) $_GET['appid'];
 		$cid = (int) $_GET['cid'];
 		$iid = (int) $_GET['iid'];
-		$this->article($iid, 1, '{iTPL}/article.comment.htm');
+		$this->article($iid,1,'id','{iTPL}/article.comment.htm');
 	}
 	private function __vote($type) {
 		// user::get_cookie() OR iUI::code(0,'iCMS:!login',0,'json');
@@ -64,7 +72,6 @@ class articleApp {
 		iDB::query("UPDATE `#iCMS@__article` SET {$sql} WHERE `id` ='{$aid}' limit 1");
 		iPHP::set_cookie($ackey, time(), 86400);
 		iUI::code(1, 'iCMS:article:' . $type, 0, 'json');
-
 	}
 	/**
 	 * [hooked 钩子]
@@ -74,9 +81,16 @@ class articleApp {
     public static function hooked($data){
         return iPHP::hook('article',$data,iCMS::$config['hooks']['article']);
     }
-	public function article($id, $page = 1, $tpl = true) {
-		$article = iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='" . (int) $id . "' AND `status` ='1' LIMIT 1;", ARRAY_A);
-		$article OR iPHP::error_404('找不到相关文章<b>ID:' . $id . '</b>', 10001);
+	public function article($fvar,$page = 1,$field='id', $tpl = true) {
+		$article = iDB::row("
+			SELECT * FROM `#iCMS@__article`
+			WHERE `".$field."`='".$fvar. "'
+			AND `status` ='1' LIMIT 1;",
+		ARRAY_A);
+
+		$article OR iPHP::error_404('找不到相关文章<b>'.$field.':' . $fvar . '</b>', 10001);
+		$id = $article['id'];
+
 		if ($article['url']) {
 			if (iView::$gateway == "html") {
 				return false;
@@ -114,10 +128,8 @@ class articleApp {
 			strstr($tpl, '.htm') && $article_tpl = $tpl;
 			iView::assign('category', $article['category']);unset($article['category']);
 			iView::assign('article', $article);
-			$html = iView::render($article_tpl, 'article');
-			if (iView::$gateway == "html") {
-				return array($html, $article);
-			}
+			$view = iView::render($article_tpl, 'article');
+			if($view) return array($view,$article);
 
 		} else {
 			return $article;

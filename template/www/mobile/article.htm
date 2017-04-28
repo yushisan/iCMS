@@ -14,18 +14,18 @@
         <meta name="description" content="<!--{$article.description}-->" />
         <link rel="canonical" href="<!--{$article.iurl.desktop.url}-->">
         <!--{iCMS:public:ui}-->
-<script type="text/javascript">
-var categoryId = '<!--{$category.cid}-->';
-function showBodyUI (markup) {
-    //正文广告
-}
-$(function(){
-    $(".content img").each(function(i){
-        imgFix(this, 300);
-        $(this).fadeIn();
-    });
-})
-</script>
+        <script type="text/javascript">
+        var categoryId = '<!--{$category.cid}-->';
+        function showBodyUI (markup) {
+            //正文广告
+        }
+        $(function(){
+            $(".content img").each(function(i){
+                imgFix(this, 300);
+                $(this).fadeIn();
+            });
+        })
+        </script>
     </head>
     <body class="articleApp" i="<!--{$iCMS.APP.NAME}-->">
         <!--{include file="./header.htm"}-->
@@ -64,42 +64,8 @@ $(function(){
                             <p><br /> </p>
                             <!--{/if}-->
                             <!--{/if}-->
-                            <!--{if $article.markdown}-->
-                            <style>.editormd-html-preview {width: 90%;margin: 0 auto;}</style>
-                            <div class="article-body" id="article-markdown">
-                                <textarea id="article-markdown-content" style="display:none;"><!--{$article.body}--></textarea>
-                            </div>
-                            <!-- markdown解析如果不能正常显示,请自行修改article.htm模板 -->
-                            <link rel="stylesheet" href="./app/admincp/ui/editor.md/css/editormd.preview.min.css" />
-                            <script src="./app/admincp/ui/editor.md/lib/marked.min.js"></script>
-                            <script src="./app/admincp/ui/editor.md/lib/prettify.min.js"></script>
-                            <script src="./app/admincp/ui/editor.md/lib/raphael.min.js"></script>
-                            <script src="./app/admincp/ui/editor.md/lib/underscore.min.js"></script>
-                            <script src="./app/admincp/ui/editor.md/lib/sequence-diagram.min.js"></script>
-                            <script src="./app/admincp/ui/editor.md/lib/flowchart.min.js"></script>
-                            <script src="./app/admincp/ui/editor.md/lib/jquery.flowchart.min.js"></script>
-                            <script src="./app/admincp/ui/editor.md/editormd.min.js"></script>
-                            <script type="text/javascript">
-                            $(function() {
-                                editormd.katexURL={
-                                    css : "//cdn.bootcss.com/KaTeX/0.3.0/katex.min",
-                                    js  : "//cdn.bootcss.com/KaTeX/0.3.0/katex.min"
-                                },
-                                editormd.markdownToHTML("article-markdown", {
-                                    htmlDecode      : "style,script,iframe",  // you can filter tags decode
-                                    emoji           : true,
-                                    taskList        : true,
-                                    tex             : true,  // 默认不解析
-                                    flowChart       : true,  // 默认不解析
-                                    sequenceDiagram : true,  // 默认不解析
-                                });
-                                //懒得做判断 直接隐藏下面正文
-                                $("#article-content").hide();
-                            });
-                            </script>
-                            <!--{/if}-->
-                            <div id="article-content">
-                            <!--{$article.body}-->
+                            <div class="<!--{if $article.markdown}-->markdown<!--{/if}-->">
+                                <!--{$article.body}-->
                             </div>
                             <!--{if $article.tags_link}-->
                             <p class="article-tags">
@@ -159,15 +125,25 @@ $(function(){
                 <div class="article-prevnext mt10">
                     <p class="prev"><b>上一篇:</b>
                         <!--{iCMS:article:prev cid="$article.cid" id="$article.id"}-->
+                        <!--{if $article_prev}-->
                         <a href="<!--{$article_prev.url}-->" class="prev" target="_self">
                             <!--{$article_prev.title}-->
                         </a>
+                        <!--{else}-->
+                        没有了
+                        <!--{/if}-->
                     </p>
                     <p class="next">
+                        <b>下一篇:</b>
                         <!--{iCMS:article:next cid="$article.cid" id="$article.id"}-->
+                        <!--{if $article_next}-->
                         <a href="<!--{$article_next.url}-->" class="next" target="_self">
                             <!--{$article_next.title}-->
-                        </a><b>:下一篇</b></p>
+                        </a>
+                        <!--{else}-->
+                        没有了
+                        <!--{/if}-->
+                    </p>
                 </div>
                 <div class="share">
                     <div class="share-icon">
@@ -182,17 +158,17 @@ $(function(){
                     </div>
                     <script>
                     window._bd_share_config = {
-                            common: {
-                                bdText: '<!--{$article.title}-->',
-                                bdDesc: '<!--{$article.description|html2txt}-->',
-                                bdUrl: '<!--{$article.url}-->',
-                                bdPic: '<!--{$article.pic.url}-->'
-                            },
-                            share: [{
-                                "bdSize": 16
-                            }]
-                        }
-                        //以下为js加载部分
+                        common: {
+                            bdText: '<!--{$article.title}-->',
+                            bdDesc: '<!--{$article.description|html2txt}-->',
+                            bdUrl: '<!--{$article.url}-->',
+                            bdPic: '<!--{$article.pic.url}-->'
+                        },
+                        share: [{
+                            "bdSize": 16
+                        }]
+                    }
+                    //以下为js加载部分
                     with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
                     </script>
                 </div>
@@ -225,7 +201,6 @@ $(function(){
                 </ul>
             </section>
             <div class="clearfix mt10"> </div>
-
             <section class="bg-white">
                 <div class="u-ttl">
                     <h2><i class="iconfont icon-ranking"></i> <!--{$category.name}-->排行榜</h2>

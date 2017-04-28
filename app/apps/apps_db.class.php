@@ -182,7 +182,7 @@ class apps_db {
     //      iDB::query($sql);
     //      return array($name,$PRIMARY);
     // }
-    public static function create_table($name,$fields=null,$indexs=null,$ret=false){
+    public static function create_table($name,$fields=null,$indexs=null,$query=true){
         $fields_sql = array();
         if(is_array($fields))foreach ($fields as $key => $arr) {
             if($arr){
@@ -198,10 +198,10 @@ class apps_db {
             .implode(",\n", $fields_sql).
         ') ENGINE=MYISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;';
 
-         if($ret){
+         if($query==='sql'){
             return $sql;
          }
-         iDB::query($sql);
+         $query && iDB::query($sql);
          return array($name,$PRIMARY);
     }
     public static function create_table_sql($json) {

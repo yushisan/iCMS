@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 
@@ -358,25 +358,34 @@ class appsAdmincp{
       $url   = apps_store::STORE_URL.'/store.get?'.http_build_query($array);
       $json  = iHttp::remote($url);
       $array = json_decode($json);
+
       $check = true;
       if($type=='app'){
           iDB::value("
             SELECT `id` FROM `#iCMS@__apps`
             WHERE `app` ='".$array->app."'
           ") && $check = false;
+          if($array->data->tables){
+            foreach ($array->data->tables as $table) {
+                apps_db::check_table(iDB::table($table)) && iUI::alert('['.$table.']数据表已经存在!','js:1',1000000);
+            }
+          }
       }
+
       if($type=='template'){
         $path = iPHP_TPL_DIR.'/'.$array->app;
         iFS::checkDir($path) && $check = false;
       }
-      $check OR iUI::dialog($array->name.'['.$array->app.'] 该'.$title.'已存在','js:1',5);
+      $check OR iUI::dialog($array->name.'['.$array->app.'] 该'.$title.'已存在','js:1',1000000);
 
       if($array){
         if($array->premium){
-          iUI::$break               = false;
-          iUI::$dialog['ok']        = true;
-          iUI::$dialog['cancel']    = true;
-          iUI::$dialog['ok:js']     = iUI::$dialog['cancel:js'] = '
+          iUI::$break                = false;
+          iUI::$dialog['quickClose'] = false;
+          iUI::$dialog['modal']      = true;
+          iUI::$dialog['ok']         = true;
+          iUI::$dialog['cancel']     = true;
+          iUI::$dialog['ok:js']      = iUI::$dialog['cancel:js'] = '
             top.clear_pay_notify_timer();
           ';
           iUI::dialog('
@@ -489,12 +498,12 @@ class appsAdmincp{
           if(apps_store::$app_id){
             iUI::dialog($msg,'url:'.APP_URI."&do=add&id=".apps_store::$app_id,10);
           }else{
-            iUI::dialog($msg,'js:1',3);
+            iUI::dialog($msg,'js:1',1000000);
           }
         }else if($type=='template'){
           $msg.= apps_store::install_template($app);
           $msg = str_replace('<iCMS>', '<br />', $msg);
-          iUI::dialog('<div style="overflow-y: auto;height: 360px;">'.$msg.'</div>','js:1',300000);
+          iUI::dialog('<div style="overflow-y: auto;height: 360px;">'.$msg.'</div>','js:1',1000000);
         }
     }
 }

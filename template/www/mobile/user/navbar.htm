@@ -51,7 +51,9 @@
       <li class="setpassword"><a href="<!--{iCMS:router url='user:profile:setpassword'}-->"><i class="fa fa-cog"></i> 修改密码</a></li>
       <li class="custom"><a href="<!--{iCMS:router url='user:profile:custom'}-->"><i class="fa fa-picture-o"></i> 个人封面</a></li>
     </ul>
+    <!--{if $pg}-->
     <script>$("li.<!--{$pg}-->").addClass('active');</script>
+    <!--{/if}-->
   </div>
   <div class="menu-right">
     <span class="circle menu-close"><i class="fa fa-times">X</i></span>

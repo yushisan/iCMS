@@ -1,8 +1,11 @@
-<?php /**
-* @package iCMS
-* @copyright 2007-2017, iDreamSoft
-* @license http://www.idreamsoft.com iDreamSoft
-* @author coolmoo <idreamsoft@qq.com>
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
@@ -59,7 +62,7 @@ $("#weixin_interface").val('<?php echo iCMS::$config['router']['public'] ; ?>/ap
                 接口URL
               </span>
               <input disabled type="text" class="span7" id="weixin_interface" value="<?php echo iCMS::$config['router']['public'] ; ?>/api.php?app=weixin&do=interface&api_token=<?php echo $config['token']?$config['token']:'Token(令牌)' ; ?>"/>
-              <a class="btn" href="http://www.idreamsoft.com/doc/iCMS/weixin_interface.html" target="_blank">
+              <a class="btn" href="https://www.icmsdev.com/docs/weixin_mp.html" target="_blank">
                 <i class="fa fa-question-circle"></i> 配置帮助
               </a>
             </div>

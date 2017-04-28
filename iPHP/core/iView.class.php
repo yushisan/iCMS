@@ -37,7 +37,6 @@ class iView {
         self::$handle->register_block("cache", array("iView", "block_cache"));
         self::$handle->template_callback = array(
             "resource" => array("iView","callback_path"),
-            "output"   => array("iView","callback_output"),
             "func"     => array("iView","callback_func"),
         );
         self::$handle->assign('GET', $_GET);
@@ -125,13 +124,6 @@ class iView {
                 return $_tpl;
             }
 
-            // if (iPHP_DEVICE != 'desktop') {//移动设备
-            //     $_tpl = str_replace($flag, iPHP_MOBILE_TPL, $tpl); // mobile/
-            //     if (@is_file(iPHP_TPL_DIR . "/" . $_tpl)) {
-            //         return $_tpl;
-            //     }
-
-            // }
             $_tpl = str_replace($flag, iPHP_APP, $tpl);
             if (is_file(iPHP_TPL_DIR . "/" . $_tpl)) {
                 return $_tpl;
@@ -140,20 +132,12 @@ class iView {
         } elseif (strpos($tpl, '{iTPL}') !== false) {
             $tpl = str_replace('{iTPL}', iPHP_DEFAULT_TPL, $tpl);
         }
-        // if (iPHP_DEVICE != 'desktop' && strpos($tpl, iPHP_APP) === false) {
-        //     $current_tpl = dirname($tpl);
-        //     if (!in_array($current_tpl, array(iPHP_DEFAULT_TPL, iPHP_MOBILE_TPL))) {
-        //         $tpl = str_replace($current_tpl . '/', iPHP_DEFAULT_TPL . '/', $tpl);
-        //     }
-        // }
+
         if (is_file(iPHP_TPL_DIR . "/" . $tpl)) {
             return $tpl;
         } else {
             iPHP::error_404('Unable to find the template file <b>iPHP:://template/' . $tpl . '</b>', '002', 'TPL');
         }
-    }
-    public static function callback_output($html,$file=null){
-        return $html;
     }
     public static function app_vars($app_name = true, $out = false) {
         $app_name === true && $app_name = iPHP::$app_name;
@@ -164,9 +148,7 @@ class iView {
         return self::$handle->get_template_vars($key);
     }
     public static function clear_tpl($file = null) {
-        if(empty(self::$handle)){
-            self::init();
-        }
+        self::$handle OR self::init();
         self::$handle->clear_compiled_tpl($file);
     }
     public static function value($key, $value) {
@@ -182,12 +164,11 @@ class iView {
         self::$handle->clear_assign($key);
     }
     public static function display($tpl) {
+        self::$handle OR self::init();
         self::$handle->display($tpl);
     }
     public static function fetch($tpl) {
-        if(empty(self::$handle)){
-            self::init();
-        }
+        self::$handle OR self::init();
         return self::$handle->fetch($tpl);
     }
     public static function render($tpl, $p = 'index') {

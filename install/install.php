@@ -1,17 +1,18 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 ini_set('display_errors', 'ON');
 error_reporting(E_ALL & ~E_NOTICE);
 
 define('iPHP',TRUE);
 define('iPHP_APP','iCMS'); //应用名
+define('iPHP_APP_MAIL','master@icmsdev.com');
 define('iPATH',dirname(strtr(__FILE__,'\\','/'))."/../");
 
 if($_POST['action']=='install'){
@@ -30,8 +31,11 @@ if($_POST['action']=='install'){
 	define('iPHP_DB_PREFIX',$db_prefix);	// 表名前缀, 同一数据库安装多个请修改此处
     define('iPHP_DB_PREFIX_TAG','#iCMS@__');
 
-	require iPATH.'iPHP/iPHP.php';//iPHP框架文件
+    require_once iPATH.'iPHP/iPHP.php';
     require_once iPHP_CORE.'/iUI.class.php';
+    require_once iPHP_APP_CORE.'/iCMS.class.php';
+
+    iPHP::$apps = iCMS::default_apps();
 
     $router_url     = iSecurity::escapeStr(trim($_POST['ROUTER_URL'],'/'));
     $admin_name     = iSecurity::escapeStr(trim($_POST['ADMIN_NAME']));

@@ -1,16 +1,21 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 
 class forms{
-
+    public static function short_app($app){
+        if(strpos($app, 'forms_') !== false) {
+            $app = substr($app,6);
+        }
+        return $app;
+    }
     public static function base_fields_index(){
         return array(
             // 'index_id' =>'KEY `id` (`status`,`id`)',

@@ -164,7 +164,6 @@ class iSQL {
         }
         unset($rs);
         if ($resource) {
-            is_array($field) OR $resource = array_unique($resource);
             if($ret=='array'){
                 return $resource;
             }else{

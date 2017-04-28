@@ -7,81 +7,92 @@
     <!--{iCMS:public:ui}-->
     <script>
     $(function(){
-      $("#iCMS_findpwd").click(function(event) {
-        var ua = $('input[name="uname"]'),uname = $('input[name="uname"]').val();
-        if (!uname) {
-          ua.focus();
-          iCMS.tip(ua, '<i class="fa fa-times-circle"></i> 请填写您注册时所用的邮箱！');
-          return false;
+      var findpwd = $("#findpwd-box");
+      $("#findpwd-submit").click(function(event) {
+        event.preventDefault();
+        $(".tip-error").hide();
+        var param = {
+            uname: $("#uname", findpwd).val(),
+            seccode: $("#seccode", findpwd).val()
+        }
+
+        if (!param.uname) {
+          tip({
+              forward: 'uname',
+              msg: '请填写您注册时所用的邮箱！'
+          });
+          return false
         }
         var pattern = /^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9._-])+/;
-        if (!pattern.test(uname)) {
-          ua.focus();
-          iCMS.tip(ua, '<i class="fa fa-times-circle"></i> 电子邮箱格式不正确！');
+        if (!pattern.test(param.uname)) {
+          tip({
+              forward: 'uname',
+              msg: '电子邮箱格式不正确！'
+          });
           return false;
         }
-        var seccode = $('input[name="seccode"]').val();
-        if (!seccode) {
-          $('input[name="seccode"]').focus();
-          iCMS.tip($('input[name="seccode"]'), '<i class="fa fa-times-circle"></i> 请填写验证码！');
-          return false;
+        if (param.seccode == "") {
+            tip({
+                forward: 'seccode',
+                msg: '请输入验证码'
+            });
+            return false
         }
-        $.get(iCMS.api('user',"&do=check"), {name:'username',value: uname},
-          function(c) {
-            if (c.code) {
-              $("#iCMS_seccode_img").click();
-              iCMS.tip(ua, '<i class="fa fa-times-circle"></i> 您输入的邮箱不存在！请重新输入！');
-            }else{
-              var param = {'action':'findpwd','uname':uname,'seccode':seccode}
-              $.post(iCMS.api('user'), param, function(ret) {
-                if (ret.code) {
-                  iCMS.tip(ua, '<i class="fa fa-check-circle" style="color: #33B800;"></i> '+ret.msg);
-                } else {
-                  iCMS.tip(ua, '<i class="fa fa-times-circle"></i> '+ret.msg);
-                }
-              }, 'json');
+        //找回密码接口
+        iCMS.run('passport', function($PASSPORT) {
+            //成功 事件绑定
+            $PASSPORT.SUCCESS = function(s) {
+              iUI.alert(s.msg);
             }
-          }, 'json');
-
+            //失败 事件绑定
+            $PASSPORT.FAIL = function(f) {
+              tip(f);
+            }
+            //提交参数
+            $PASSPORT.FINDPWD(param);
+        });
       });
+      //提示
+      function tip(ret) {
+          iCMS.UI.seccode(".seccode-img", findpwd);
+          var tip = $('.tip-' + ret.forward);
+          tip.text(ret.msg).show();
+      }
     })
     </script>
   </head>
-  <body class="iCMS-mobile">
-    <nav id="header" class="navbar navbar-default" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="btn btn-default header-back" href="<!--{$forward}-->"><i class="fa fa-arrow-left"></i></a>
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#iCMS-menu-box">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          </button>
-          <h3 class="header-title">找回密码</h1>
+  <body class="userApp passport">
+    <!--{include file="./navbar.htm"}-->
+    <div class="container">
+      <div id="findpwd-box" class="wrapper">
+        <div class="logo">
+          <a href="<!--{$site.url}-->">
+            <img src="<!--{$site.urls.tpl}-->/static/img/iCMS.LOGO.png" />
+          </a>
+        </div>
+        <div class="form-group">
+          <label for="uname" class="control-label">邮箱：</label>
+          <input type="text" name="uname" class="form-control" id="uname" placeholder="请填写你注册时所用的邮箱">
+          <p class="help-block tip-error tip-uname tip-mail">请填写你注册时所用的邮箱</p>
+        </div>
+        <div class="form-group seccode-wrap">
+          <label for="seccode">验证码</label>
+          <input type="text" id="seccode" name="seccode" class="form-control" placeholder="验证码" />
+          <!--{iCMS:public:seccode}-->
+          <p class="help-block tip-error tip-seccode">请输入图片中的字符!</p>
+        </div>
+
+        <div class="clearfix mt10">
+          <button type="submit" id="findpwd-submit" class="btn btn-primary btn-lg btn-block">提 交</button>
+        </div>
+        <div class="clearfix mt10">
+          <a class="btn btn-success" href="<!--{iCMS:router url='user:register'}-->">
+            <i class="fa fa-user"></i> 我没有账号？去注册 »
+          </a>
         </div>
       </div>
-    </nav>
-    <div class="container">
-      <div class="wrapper login_reg_wrapper" id="iCMS-login-page">
-          <div class="logo"><a href="<!--{$site.url}-->"><img src="<!--{$site.urls.ui}-->/img/iCMS.logo-6.0.png" width="180"/></a></div>
-          <div class="form-group">
-            <label for="login_uname">邮箱</label>
-            <input type="text" placeholder="请填写你注册时所用的邮箱" data-container=".uname_tip" name="uname" id="login_uname" class="iCMS_login_uname form-control">
-            <span class="help-block uname_tip"></span>
-          </div>
-          <div class="form-group">
-            <input type="text" maxlength="4" name="seccode" class="iCMS_login_seccode iCMS_seccode form-control" placeholder="验证码"  data-container=".seccode_tip" >
-            <img src="<!--{iCMS:router url='/api/public/seccode'}-->" alt="验证码" class="iCMS_seccode_img r3"/>
-            <a href="javascript:;" class="iCMS_seccode_text" style="float: none">换一张</a>
-            <span class="help-block seccode_tip">请输入图片中的字符!</span>
-          </div>
-          <div class="clearfix mt10">
-            <button type="submit" class="btn btn-primary btn-lg btn-block iCMS_login_btn" id="iCMS_findpwd">提 交</button>
-          </div>
-          <div class="clearfix mb20"></div>
-      </div>
     </div>
+    <div class="clearfix mt10"></div>
     <!--{include file="iCMS://footer.htm"}-->
   </body>
 </html>

@@ -1,23 +1,25 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 class publicApp {
 	public $methods = array('sitemapindex', 'sitemap', 'seccode', 'agreement', 'crontab', 'time', 'qrcode');
 	public function API_agreement() {
-		iView::render('{iTPL}/user/agreement.htm');
+		iView::display('iCMS://user/agreement.htm');
 	}
 	public function API_sitemapindex() {
 		header("Content-type:text/xml");
-		iView::render('/tools/sitemap.index.htm');
+		iView::display('/tools/sitemap.index.htm');
 	}
 	public function API_sitemap() {
 		header("Content-type:text/xml");
 		iView::assign('cid', (int) $_GET['cid']);
-		iView::render('/tools/sitemap.baidu.htm');
+		iView::display('/tools/sitemap.baidu.htm');
 	}
 	public function API_crontab() {
 		$sql = iSQL::update_hits(false,0);

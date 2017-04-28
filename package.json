@@ -1,16 +1,16 @@
 {
   "name": "iCMS",
-  "title": "iCMS",
+  "title": "iCMS v7.0",
   "description": "iCMS - i Content Management System!",
   "version": "7.0.0",
-  "homepage": "http://www.idreamsoft.com/iCMS",
+  "homepage": "https://www.icmsdev.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/idreamsoft/iCMS"
   },
   "author": {
-    "name": "idreamsoft",
-    "email": "idreamsoft@qq.com",
+    "name": "icmsdev",
+    "email": "master@icmsdev.com",
     "url": "https://github.com/idreamsoft"
   },
   "keywords": [

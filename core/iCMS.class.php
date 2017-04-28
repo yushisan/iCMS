@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 
@@ -13,7 +13,10 @@ class iCMS {
     public static $config    = array();
 
 	public static function init(){
-        self::$config = iPHP::config();
+        self::$config = iPHP::config(array(
+            'apps' => array(__CLASS__,'default_apps')
+        ));
+
         iDevice::init(self::$config);
 
         define('iCMS_URL',       self::$config['router']['url']);
@@ -60,6 +63,10 @@ class iCMS {
         return iPHP::run($app,$do,$args,$prefix);
     }
 
+    public static function loader($name){
+        return iPHP::loader($name,iPHP_APP_CORE);
+    }
+
     public static function API($app = NULL,$do = NULL) {
         $app OR $app = iSecurity::escapeStr($_GET['app']);
         return self::run($app,null,null,'API_');
@@ -68,11 +75,6 @@ class iCMS {
         header("Access-Control-Allow-Origin: " . iCMS_URL);
         header('Access-Control-Allow-Headers: X-Requested-With,X_Requested_With');
     }
-
-    public static function loader($name){
-        return iPHP::loader($name,iPHP_APP_CORE);
-    }
-
     public static function assign_site(){
         $site          = self::$config['site'];
         $site['title'] = $site['name'];
@@ -123,4 +125,19 @@ class iCMS {
         }
         return (int)$total;
     }
+    public static function default_apps() {
+        return array(
+            'admincp' => '10',
+            'config'  => '11',
+            'files'   => '12',
+            'menu'    => '13',
+            'group'   => '14',
+            'members' => '15',
+            'apps'    => '17',
+            'former'  => '18',
+            'patch'   => '19',
+            'cache'   => '23'
+        );
+    }
+
 }

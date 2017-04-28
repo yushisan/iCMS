@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 class searchApp {
 	public $methods	= array('iCMS');
 	public function API_iCMS(){
@@ -31,7 +33,7 @@ class searchApp {
         $iurl->pageurl = $iurl->href.'&page={P}';
         iURL::page_url($iurl);
         iView::assign("search",$search);
-        return iView::render($tpl,'search');
+        iView::display($tpl,'search');
     }
     private function __slog($search){
         $sid    = iDB::value("SELECT `id` FROM `#iCMS@__search_log` WHERE `search` = '$search' LIMIT 1");

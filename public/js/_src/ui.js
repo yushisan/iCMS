@@ -3,6 +3,9 @@ iCMS.define("ui",{
             var dialog = iCMS.require("ui.dialog");
             return dialog(opts);
         },
+        success: function(msg, callback) {
+            this.alert(msg, true, callback);
+        },
         alert: function(msg, ok, callback) {
             var dialog = iCMS.require("ui.dialog");
                 var opts = ok ? {
@@ -12,12 +15,11 @@ iCMS.define("ui",{
                     label: 'warning',
                     icon: 'warning'
                 }
-                opts.id         = 'iCMS-DIALOG-ALERT';
-                opts.skin       = 'iCMS_dialog_alert'
-                opts.content    = msg;
-                opts.time       = 3000;
-                opts.lock       = true;
-                // opts.quickClose = false;
+                opts.id      = 'iCMS-DIALOG-ALERT';
+                opts.skin    = 'iCMS_dialog_alert'
+                opts.content = msg;
+                opts.time    = 3000;
+                opts.modal   = true;
                 dialog(opts, callback);
             // });
         },

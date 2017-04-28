@@ -1,12 +1,9 @@
 <?php
 if($rs['table'])foreach ($rs['table'] as $key => $tval) {
   $tbn = $tval['table'];
-  if(!apps_db::check_table($tbn)){
-    echo $tbn ."表不存在!";
-    continue;
-  }
 ?>
 <div id="apps-add-<?php echo $key; ?>-field" class="app-table-list tab-pane">
+  <?php if(apps_db::check_table($tbn)){ ?>
   <table class="table table-hover table-bordered">
     <thead>
       <tr>
@@ -85,6 +82,11 @@ if($rs['table'])foreach ($rs['table'] as $key => $tval) {
       </tbody>
     </table>
   </div>
+<?php
+  }else{
+    echo '<div class="alert alert-error">'.$tbn.' 表不存在</div>';
+  }
+?>
 </div>
 <?php }else{?>
 <?php }?>

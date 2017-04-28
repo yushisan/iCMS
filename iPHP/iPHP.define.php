@@ -53,6 +53,7 @@ define('iPHP_TPL_CACHE',iPATH."cache/template");
 
 //---------------系统设置------------------------
 defined('iPHP_APP') OR define('iPHP_APP',"iPHP");
+defined('iPHP_APP_MAIL') OR define('iPHP_APP_MAIL',"master@iiiphp.com");
 defined('iPHP_MEMORY_LIMIT') OR define('iPHP_MEMORY_LIMIT', '128M');
 
 //-----------------模板标签-----------------------

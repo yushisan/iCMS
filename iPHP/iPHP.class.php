@@ -3,7 +3,7 @@
  * iPHP - i PHP Framework
  * Copyright (c) 2012 iiiphp.com. All rights reserved.
  *
- * @author coolmoo <iiiphp@qq.com>
+ * @author icmsdev <iiiphp@qq.com>
  * @website http://www.iiiphp.com
  * @license http://www.iiiphp.com/license
  * @version 2.0.0
@@ -65,7 +65,7 @@ class iPHP {
 			$map[$name] && $name = $map[$name];
 			$core===null && $core = iPHP_CORE;
 			$path = $core.'/'.$name.'.class.php';
-		}else if(iPHP::$apps[$name]||in_array($name, array('apps','content','former')) ){
+		}else if(array_key_exists($name,(array)iPHP::$apps)){
 			//app.class.php
 			$file OR $file = $name.'.class';
 			$path = iPHP_APP_DIR . '/' . $name . '/' . $file . '.php';
@@ -82,7 +82,7 @@ class iPHP {
 			}
 		}
 	}
-	public static function config() {
+	public static function config($call=null) {
 		$site = iPHP_MULTI_SITE ? $_SERVER['HTTP_HOST'] : iPHP_APP;
 		if (iPHP_MULTI_DOMAIN) {
 			//只绑定主域
@@ -129,7 +129,7 @@ class iPHP {
 		function_exists('date_default_timezone_set') && @date_default_timezone_set($timezone);
 
 		self::$apps = $config['apps'];
-		empty(self::$apps) && self::$apps = array('admincp'=>'0');
+		empty(self::$apps) && self::$apps = self::callback($call['apps']);
 		self::define_app();
 		iPHP_DB_DEBUG   && iDB::$show_errors  = true;
 		iPHP_DB_TRACE   && iDB::$show_trace   = true;
@@ -492,9 +492,12 @@ class iPHP {
 	        exit;
 	    }
 		if (isset($_GET['frame'])) {
-			iUI::$dialog['lock'] = true;
+			iUI::$dialog['modal'] = true;
 			$html = str_replace("\n", '<br />', $html);
-			iUI::dialog(array("warning:#:warning-sign:#:{$html}", '系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'), 'js:1', 30000000);
+			iUI::dialog(array(
+				"warning:#:warning-sign:#:{$html}",
+				'系统错误!可发邮件到 '.iPHP_APP_MAIL.' 反馈错误!我们将及时处理'
+			), 'js:1', 30000000);
 			exit;
 		}
 		if ($_POST) {

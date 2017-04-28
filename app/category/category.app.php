@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 class categoryApp{
 	public $methods	= array('iCMS','category');
     public function __construct($appid = iCMS_APP_ARTICLE) {
@@ -79,11 +81,11 @@ class categoryApp{
             $GLOBALS['page']>1 && $tpl='list';
 
             if($category['template']){
-                $html = iView::render($category['template'][$tpl],'category.'.$tpl);
+                $view = iView::render($category['template'][$tpl],'category.'.$tpl);
             }else{
                 iPHP::error_404('找不到该栏目的模板配置,请设置栏目'.$tpl.'模板', 20002);
             }
-            if(iView::$gateway=="html") return array($html,$category);
+            if($view) return array($view,$category);
         }else{
         	return $category;
         }
@@ -91,11 +93,7 @@ class categoryApp{
     public static function get_lite($category){
         $keyArray = array('sortnum','password','mode','domain','config','addtime');
         foreach ($keyArray as $i => $key) {
-            if(is_array($category[$key])){
-                $category[$key] = self::get_lite($category[$key]);
-            }else{
-                unset($category[$key]);
-            }
+             unset($category[$key]);
         }
         iDevice::router($category);
         iDevice::router($category['iurl']);

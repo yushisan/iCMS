@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 
 class apps_mod {
     public static function data_table_name($name){
@@ -56,13 +58,18 @@ class apps_mod {
             'index_cid_hits'   =>'KEY `cid_hits` (`status`,`cid`,`hits`)'
         );
     }
+    public static $base_fields_key = null;
     public static function base_fields_key($key=null){
-        $array = array('id','cid','ucid','pid','sortnum',
-            'title','editor','userid','pubdate','postime','tpl','hits',
-            'hits_today','hits_yday','hits_week','hits_month',
-            'favorite','comments','good','bad','creative',
-            'weight','mobile','postype','status'
-        );
+        if(self::$base_fields_key===null){
+          $array = array('id','cid','ucid','pid','sortnum',
+              'title','editor','userid','pubdate','postime','tpl','hits',
+              'hits_today','hits_yday','hits_week','hits_month',
+              'favorite','comments','good','bad','creative',
+              'weight','mobile','postype','status'
+          );
+        }else{
+          $array = self::$base_fields_key;
+        }
         if($key){
             return in_array($key, $array);
         }
@@ -136,13 +143,14 @@ class apps_mod {
     //     array_push ($table,$union_id,'正文');
     //     return array($name=>$table);
     // }
-    public static function data_create_table($fieldata,$name,$union_id) {
+    public static function data_create_table($fieldata,$name,$union_id,$query=true) {
         $table = apps_db::create_table(
           $name,
           apps_mod::get_field_array($fieldata),//获取字段数组
           array(//索引
             'index_'.$union_id =>'KEY `'.$union_id.'` (`'.$union_id.'`)'
-          )
+          ),
+          $query
         );
         array_push ($table,$union_id,'正文');
         return array($name=>$table);

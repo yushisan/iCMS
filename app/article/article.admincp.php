@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 
@@ -241,7 +241,7 @@ class articleAdmincp{
      * [简易编辑]
      * @return [type] [description]
      */
-	public function do_updatetitle(){
+	public function do_edit(){
         $id          = (int)$_POST['id'];
         $cid         = (int)$_POST['cid'];
         $pid         = (int)$_POST['pid'];
@@ -264,7 +264,7 @@ class articleAdmincp{
             $data['pubdate'] = time();
 		}
         article::update($data ,compact('id'));
-		exit('1');
+		iUI::json(array('code'=>1));
 	}
     /**
      * [查找正文图片]
@@ -549,18 +549,14 @@ class articleAdmincp{
             // $fwd && iUI::alert('内容中包含被系统屏蔽的字符，请重新填写。');
         }
 
-        if(empty($aid) && self::$config['repeatitle']) {
-            article::check_title($title) && iUI::alert('该标题的文章已经存在!请检查是否重复');
+        if(self::$config['repeatitle']) {
+            article::check($title,$aid,'title') && iUI::alert('该标题的文章已经存在!请检查是否重复');
         }
         $category = category::get($cid);
-        if(strstr($category->rule->article,'{LINK}')!==false){
-            if(empty($clink)){
-                $clink = iPinyin::get($title);
-            }
-            if(empty($aid) && $clink) {
-                article::check_clink($clink) && iUI::alert('该文章自定义链接已经存在!请检查是否重复');
-            }
+        if(strstr($category->rule['article'],'{LINK}')!==false && empty($clink)){
+            $clink = iPinyin::get($title,self::$config['clink']);
         }
+        $clink && article::check($clink,$aid,'clink') && iUI::alert('该文章自定义链接已经存在!请检查是否重复');
 
 
         if(empty($description) && empty($url)) {
@@ -617,6 +613,7 @@ class articleAdmincp{
                 'id'      =>$aid,
                 'url'     =>$url,
                 'cid'     =>$cid,
+                'clink'   =>$clink,
                 'pubdate' =>$pubdate
             ),(array)$category))->href;
 
@@ -637,6 +634,10 @@ class articleAdmincp{
                 ));
                 return;
             }
+            if(isset($_GET['keyCode'])){
+                iUI::success('文章保存成功','url:'.APP_URI."&do=add&id=".$aid);
+            }
+
             $moreBtn = array(
                     array("text" =>"查看该文章","target"=>'_blank',"url"=>$article_url,"close"=>false),
                     array("text" =>"编辑该文章","url"=>APP_URI."&do=add&id=".$aid),
@@ -644,7 +645,7 @@ class articleAdmincp{
                     array("text" =>"返回文章列表","url"=>$REFERER_URL),
                     array("text" =>"查看网站首页","url"=>iCMS_URL,"target"=>'_blank')
             );
-            iUI::$dialog['lock']	= true;
+            iUI::$dialog['modal'] = true;
             iUI::dialog('success:#:check:#:文章添加完成!<br />10秒后返回文章列表','url:'.$REFERER_URL,10,$moreBtn);
         }else{
             isset($_POST['ischapter']) OR $chapter = 0;
@@ -675,7 +676,9 @@ class articleAdmincp{
                     'indexid' => $aid
                 );
             }
-
+            if(isset($_GET['keyCode'])){
+                iUI::success('文章保存成功');
+            }
             iUI::success('文章编辑完成!<br />3秒后返回文章列表','url:'.$REFERER_URL);
         }
     }
@@ -683,7 +686,7 @@ class articleAdmincp{
         $msg = $this->del($this->id);
         $msg.= $this->del_msg('文章删除完成!');
         $msg.= $this->del_msg('10秒后返回文章列表!');
-        iUI::$dialog['lock'] = true;
+        iUI::$dialog['modal'] = true;
         iUI::dialog($msg,'js:1');
     }
 

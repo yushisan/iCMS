@@ -1,11 +1,10 @@
-/**
-* iCMS - Intelligence Content Management System
-* Copyright (c) 2007-2015 idreamsoft.com iiimon Inc. All rights reserved.
+/*!
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
-* @version 6.1.0
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 (function($) {
     $.fn.slider = function(options) {

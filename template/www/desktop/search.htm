@@ -13,6 +13,10 @@
     <meta name="mobile-agent" content="format=html5;url=<!--{$search.iurl.mobile.url}-->">
     <link rel="alternate" media="only screen and(max-width: 640px)" href="<!--{$search.iurl.mobile.url}-->">
     <!--{iCMS:public:ui}-->
+    <script type="text/javascript">
+    //移动端跳转 域名不一样时才会跳转
+    redirect_to_mobile("<!--{$search.iurl.mobile.url}-->");
+    </script>
 </head>
 
 <body class="searchApp" i="<!--{$iCMS.APP.NAME}-->">

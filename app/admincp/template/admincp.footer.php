@@ -1,9 +1,12 @@
-<?php /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 ?>
   <div class="clearfloat"></div>
@@ -17,12 +20,12 @@ defined('iPHP') OR exit('What are you doing?');
 <div class="iCMS-batch">
   <div id="weightBatch">
     <div class="input-prepend"><span class="add-on">权重</span>
-      <input type="text" class="span2" name="mweight"/>
+      <input type="text" class="span4" name="mweight"/>
     </div>
   </div>
   <div id="keywordBatch">
     <div class="input-prepend input-append"><span class="add-on">关键字</span>
-      <input type="text" class="span2" name="mkeyword"/>
+      <input type="text" class="span4" name="mkeyword"/>
     </div>
     <div class="clearfloat mb10"></div>
     <div class="input-prepend input-append"><span class="add-on">追加
@@ -33,7 +36,7 @@ defined('iPHP') OR exit('What are you doing?');
   </div>
   <div id="tagBatch">
     <div class="input-prepend"><span class="add-on">标签</span>
-      <input type="text" class="span2" name="mtag"/>
+      <input type="text" class="span4" name="mtag"/>
     </div>
     <div class="clearfloat mb10"></div>
     <div class="input-prepend input-append"><span class="add-on">追加

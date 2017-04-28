@@ -1,9 +1,12 @@
-<?php /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
 ?>
@@ -33,7 +36,7 @@ $(function(){
 
 	var edialog;
 	$(".edit").dblclick(function(){
-		var a=$(this),aid=a.attr("aid"),box=$('#ed-box'),title=$.trim(a.text());
+		var a=$(this),aid=a.attr("aid"),box=$('#ed-box'),title=$.trim($('.aTitle',a).text());
 		$('#edcid,#edpid').empty();
 		var edcid	= $("#cid").clone().show().appendTo('#edcid'),
 			edpid	= $("#pid").clone().show().appendTo('#edpid'),
@@ -45,8 +48,10 @@ $(function(){
 		$(".chosen-select",box).chosen(chosen_config);
 
 		$.getJSON("<?php echo APP_URI; ?>",{'do':'getjson','id':aid},function(d){
-			edcid.val(d.cid).trigger("chosen:updated");	edpid.val(d.pid).trigger("chosen:updated");
-			edtags.val(d.tags);	edsource.val(d.source);
+			edcid.val(d.cid).trigger("chosen:updated");
+      edpid.val(d.pid).trigger("chosen:updated");
+			edtags.val(d.tags);
+      edsource.val(d.source);
 			eddesc.val(d.description);
 		});
 
@@ -64,17 +69,19 @@ $(function(){
 							return false;
 						}
 						$(box).trigger("chosen:updated");
-						$.post("<?php echo APP_URI; ?>&do=updatetitle",{
+						$.post("<?php echo APP_URI; ?>&do=edit",{
                 id:aid,cid:cid,pid:edpid.val(),
                 title:title,
                 source:edsource.val(),
                 tags:edtags.val(),
-                description:eddesc.val()},
-						  function(o){
-  							if(o=="1"){
-  								window.location.reload();
+                description:eddesc.val()
+              },
+						  function(res){
+  							if(res.code){
+                  $('.aTitle',a).text(title);
+                  iCMS.alert("修改完成!",true);
   							}
-						});
+						},'json');
 					}}]
 		});
 	});
@@ -237,7 +244,9 @@ $(function(){
                   <span class="label label-info">用户</span>
                   <?php } ?>
                   <?php if($value['haspic']) echo '<img src="./app/admincp/ui/img/image.gif" align="absmiddle">'?>
-                  <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $value['id'] ; ?>" data-toggle="modal" title="预览"><?php echo $value['title'] ; ?></a>
+                  <a class="aTitle" href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $value['id'] ; ?>" data-toggle="modal" title="预览">
+                    <?php echo $value['title'] ; ?>
+                  </a>
                  </div>
                 <div class="row-actions">
                   <a href="<?php echo __ADMINCP__; ?>=files&indexid=<?php echo $value['id'] ; ?>&method=database" class="tip-bottom" title="查看文章图片库" target="_blank"><i class="fa fa-picture-o"></i></a>

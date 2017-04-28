@@ -6,7 +6,6 @@
  * Name:	 section_start
  *
  * ADDED: { include file='./filename' import=true }
- * @modifier coolmoo <www.idreamsoft.com> 16:17 2007-11-8
  */
 
 function compile_include($arguments, &$object){

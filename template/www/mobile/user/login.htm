@@ -98,7 +98,7 @@
           <label for="seccode">验证码</label>
           <input type="text" id="seccode" name="seccode" class="form-control" placeholder="验证码" />
           <!--{iCMS:public:seccode}-->
-          <span class="help-block tip-error tip-seccode">请输入图片中的字符!</span>
+          <p class="help-block tip-error tip-seccode">请输入图片中的字符!</p>
         </div>
         <!--{/if}-->
         <div class="checkbox">
@@ -115,6 +115,12 @@
             <i class="fa fa-user"></i> 我没有账号？去注册 »
           </a>
         </div>
+        <div class="clearfix mt10">
+          <a class="btn btn-info" href="<!--{iCMS:router url='user:findpwd'}-->">
+            <i class="fa fa-user"></i> 忘记密码？
+          </a>
+        </div>
+
         <!--{if !$user}-->
         <hr />
         <div class="open-btn">

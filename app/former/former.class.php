@@ -3,7 +3,7 @@
  * iPHP - i PHP Framework
  * Copyright (c) 2012 iiiphp.com. All rights reserved.
  *
- * @author coolmoo <iiiphp@qq.com>
+ * @author icmsdev <iiiphp@qq.com>
  * @website http://www.iiiphp.com
  * @license http://www.iiiphp.com/license
  * @version 2.0.0

@@ -1,8 +1,11 @@
-<?php /**
-* @package iCMS
-* @copyright 2007-2017, iDreamSoft
-* @license http://www.idreamsoft.com iDreamSoft
-* @author coolmoo <idreamsoft@qq.com>
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
@@ -115,7 +118,7 @@ function clear_pay_notify_timer () {
       <p class="name">
         <b>@{{value.author}}</b>
         <span class="version">版本:{{value.version}}</span>
-        <span class="size">大小:{{value.size}}MB</span>
+        <span class="size">大小:{{value.size}}</span>
       </p>
     </div>
     <div class="item-description">

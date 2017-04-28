@@ -23,40 +23,36 @@ class iDevice {
         define('iPHP_REQUEST_URL',iPHP_REQUEST_HOST.iPHP_REQUEST_URI);
 
         self::$config = $config['template'];
-
-        /**
-         * 判断指定设备
-         */
-        iPHP::PG('device') && list($device_name, $device_tpl, $domain) = self::check(self::$config['device'],'device');
-        /**
-         * 无指定设备 判断USER_AGENT
-         */
-        empty($device_tpl) && list($device_name, $device_tpl, $domain) = self::check(self::$config['device'],'ua');
-        /**
-         * 无指定USER_AGENT  判断域名模板
-         */
-        empty($device_tpl) && list($device_name, $device_tpl, $domain) = self::check(self::$config['device'],'domain');
-        $def_tpl = $device_tpl;
+        //有设置其它设备
+        if(self::$config['device']){
+            iPHP::PG('device')&& $device = self::check('device');   //判断指定设备
+            empty($device)    && $device = self::check('ua');       //无指定设备 判断USER_AGENT
+            empty($device)    && $device = self::check('domain');   //无指定USER_AGENT  判断域名模板
+            $device && list($device_name, $device_tpl,$domain,$index_tpl) = $device;
+        }
 
         iPHP::$mobile = false;
-        if (empty($def_tpl)) {
+        if (empty($device_tpl)) {
             //检查是否移动设备
             if (self::agent(self::$config['mobile']['agent'])) {
                 iPHP::$mobile = true;
-                $mobile_tpl   = self::$config['mobile']['tpl'];
-                $device_name  = 'mobile';
-                $def_tpl      = $mobile_tpl;
-                $domain       = self::$config['mobile']['domain'];
+                $device_name = 'mobile';
+                $device_tpl  = self::$config['mobile']['tpl'];
+                $index_tpl   = self::$config['mobile']['index'];
+                $domain      = self::$config['mobile']['domain'];
             }
         }
 
-        if (empty($def_tpl)) {
+        if (empty($device_tpl)) {
             $device_name = 'desktop';
-            $def_tpl     = self::$config['desktop']['tpl'];
+            $device_tpl  = self::$config['desktop']['tpl'];
+            $index_tpl   = self::$config['desktop']['index'];
             $domain      = $config['router']['url'];
         }
-        define('iPHP_DEFAULT_TPL', $def_tpl);
-        define('iPHP_MOBILE_TPL', $mobile_tpl);
+        empty($index_tpl) && $index_tpl = $device_tpl.'/index.htm';
+
+        define('iPHP_DEFAULT_TPL', $device_tpl);
+        define('iPHP_INDEX_TPL', $index_tpl);
         // define('iPHP_DEVICE_TPL', $device_tpl);
         define('iPHP_ROUTER_URL', $config['router']['url']);
         define('iPHP_DEVICE', $device_name);
@@ -112,8 +108,8 @@ class iDevice {
             iPHP::redirect($redirect_url);
         }
     }
-    private static function check($deviceArray = null, $flag = false) {
-        foreach ((array) $deviceArray as $key => $device) {
+    private static function check($flag = false) {
+        foreach ((array) self::$config['device'] as $key => $device) {
             if ($device['tpl']) {
                 $check = false;
                 if ($flag == 'ua') {
@@ -129,7 +125,7 @@ class iDevice {
                     }
                 }
                 if ($check) {
-                    return array($device['name'], $device['tpl'], $device['domain']);
+                    return array($device['name'], $device['tpl'], $device['domain'], $device['index']);
                 }
             }
         }

@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 
 class formsApp {
     public $methods = array('iCMS','save');
@@ -63,10 +65,8 @@ class formsApp {
             $forms_tpl = $forms['tpl'];
             strstr($tpl, '.htm') && $forms_tpl = $tpl;
             iView::assign('forms', $forms);
-            $html = iView::render($forms_tpl, 'article');
-            if (iView::$gateway == "html") {
-                return array($html, $article);
-            }
+            $view = iView::render($forms_tpl, 'article');
+            if($view) return array($view,$forms);
         } else {
             return $forms;
         }

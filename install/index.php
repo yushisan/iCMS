@@ -1,14 +1,15 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 define('iPHP',TRUE);
 define('iPHP_APP','iCMS'); //应用名
+define('iPHP_APP_MAIL','master@icmsdev.com');
 define('iPATH',dirname(strtr(__FILE__,'\\','/'))."/../");
 //框架初始化
 require iPATH.'iPHP/iPHP.php';			//iPHP框架文件
@@ -18,7 +19,7 @@ $_URI      = $_SERVER['PHP_SELF'];
 $_DIR      = substr(dirname($_URI),0,-8);
 $_DIR      = trim($_DIR,'/').'/';
 $_DIR =='/' OR $_DIR = '/'.$_DIR;
-$_URL      = 'http://'.$_SERVER['HTTP_HOST'].rtrim($_DIR,'/');
+$_URL      =  (($_SERVER['SERVER_PORT'] == 443)?'https':'http')."://".$_SERVER['HTTP_HOST'].rtrim($_DIR,'/');
 $lock_file = iPATH.'cache/install.lock';
 ?>
 <!DOCTYPE html>
@@ -28,7 +29,7 @@ $lock_file = iPATH.'cache/install.lock';
 		<title>iCMS <?php echo iCMS_VERSION ;?> - 安装向导</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta content="iDreamSoft Inc." name="Copyright" />
+		<meta content="iCMSdev.com" name="Copyright" />
 		<link href="../app/admincp/ui/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 		<link href="../app/admincp/ui/bootstrap/2.3.2/css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet"/>
 		<link href="../app/admincp/ui/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" rel="stylesheet"/>
@@ -158,19 +159,13 @@ $lock_file = iPATH.'cache/install.lock';
 				</p>
 				<ul class="masthead-links">
 					<li>
-						<a href="http://github.com/idreamsoft/icms" target="_blank">源码</a>
+						<a href="http://github.com/idreamsoft/iCMS" target="_blank">源码</a>
 					</li>
 					<li>
-						<a href="http://www.idreamsoft.com" target="_blank">官网</a>
-					</li>
-					<li>
-						<a href="http://www.idreamsoft.com/examples" target="_blank">案例</a>
+						<a href="https://www.icmsdev.com" target="_blank">官网</a>
 					</li>
 					<li><a href="https://www.linode.com/?r=35103ee1524aaff9b3edcca8cf7de8fab6e5cf9e" target="_blank">VPS推荐</a></li>
 					<li><a href="http://s.click.taobao.com/t?e=m%3D2%26s%3D7JZW1mRrlBccQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAmpVu972RyTOt3h8CUvoNV%2Fh102VLn%2Bh5EqjLczoYHWIfyEaJ8bL%2F82Uatkzf5yweOdn1BbglxZYxUhy8exlzcq9AmARIwX9K%2BnbtOD3UdznPV1H2z0iQv9NkKVMHClW0QbMqOpFMIvnvjQXzzpXdTHGJe8N%2FwNpGw%3D%3D" target="_blank">阿里云</a></li>
-					<li>
-						Version 7.0.0
-					</li>
 				</ul>
 			</div>
 		</div>
@@ -194,9 +189,9 @@ $lock_file = iPATH.'cache/install.lock';
 				<div class="row-fluid">
 					<div class="span4">
 						<img class="marketing-img" src="./img/Development.png">
-						<h2>十年磨一剑,免费且开源。</h2>
+						<h2>十年磨一剑,免费且开源</h2>
 						<p>由艾梦软件历时多年开发，并在实际项目中高效运行。iCMS 项目使用了
-						<a href="http://www.idreamsoft.com/iPHP/" target="_blank">iPHP</a>、
+						<a href="https://www.icmsdev.com/iPHP/" target="_blank">iPHP</a>、
 						<a href="http://github.com/twbs/bootstrap" target="_blank">Bootstrap</a>、
 						<a href="http://jquery.com" target="_blank">jQuery</a>、
 						<a href="http://ueditor.baidu.com" target="_blank">UEditor</a>、
@@ -206,13 +201,13 @@ $lock_file = iPATH.'cache/install.lock';
 					</div>
 					<div class="span4">
 						<img class="marketing-img" src="./img/responsive-design.png">
-						<h2>一套程序、多种设备。</h2>
-						<p>你的网站能在 <a href="http://www.idreamsoft.com" target="_blank">iCMS</a> 的帮助下通过一套内容管理系统快速、有效适配手机、微信、微信小程序、平板、PC等设备，这一切都是归于 iCMS 多终端适配功能。</p>
+						<h2>一套程序,适配多种设备</h2>
+						<p>你的网站能在 <a href="https://www.icmsdev.com" target="_blank">iCMS</a> 的帮助下通过一套内容管理系统快速、有效适配手机、微信、微信小程序、平板、PC等设备，这一切都是归于 iCMS 多终端适配功能。</p>
 					</div>
 					<div class="span4">
 						<img class="marketing-img" src="./img/Enterprise-Features.jpg">
-						<h2>功能齐全,可自定义</h2>
-						<p><a href="http://www.idreamsoft.com" target="_blank">iCMS</a> 提供了网站运营所需的基本功能。也提供了功能强大标签(TAG)系统、自定义应用、自定义表单、内容多属性多栏目归属、自定义内链、高负载、整合第三方登陆</p>
+						<h2>完整的功能支持</h2>
+						<p><a href="https://www.icmsdev.com" target="_blank">iCMS</a> 提供了网站运营所需的基本功能。也提供了功能强大标签(TAG)系统、自定义应用、自定义表单、内容多属性多栏目归属、自定义内链、高负载、整合第三方登陆</p>
 					</div>
 				</div>
 			</div>
@@ -345,6 +340,7 @@ $lock_file = iPATH.'cache/install.lock';
 					array('cache','缓存目录'),
 					array('cache/conf','网站配置目录'),
 					array('cache/conf/iCMS','网站配置目录'),
+					array('cache/conf/iCMS/config.php','网站配置文件'),
 					array('cache/iCMS','系统缓存目录'),
 					array('cache/template','模板缓存目录'),
 					array('res','资源上传目录'),
@@ -487,19 +483,19 @@ $lock_file = iPATH.'cache/install.lock';
 		<iframe class="hide" id="iCMS_FRAME" name="iCMS_FRAME"></iframe>
 		<footer class="footer">
 			<div class="container">
-				<p>艾梦软件(<a href="http://www.idreamsoft.com" target="_blank">iDreamSoft.com</a>) 版权所有  &copy; 2007-2017</p>
-				<p>iCMS 源码受 <a href="https://github.com/idreamsoft/iCMS/blob/master/LICENSE.md" target="_blank">LGPL</a> 开源协议保护</p>
+				<p>iCMS(<a href="https://www.icmsdev.com" target="_blank">iCMSdev.com</a>) 版权所有  &copy; 2007-2017</p>
+				<p>iCMS 源码受 <a href="https://www.icmsdev.com/LICENSE.html" target="_blank">LGPL</a> 开源协议保护</p>
 				<ul class="footer-links">
-					<li><a href="http://www.idreamsoft.com" target="_blank">iCMS</a></li>
+					<li><a href="https://www.icmsdev.com" target="_blank">iCMS</a></li>
 					<li class="muted">·</li>
-					<li><a href="http://www.idreamsoft.com/feedback" target="_blank">反馈问题</a></li>
+					<li><a href="https://www.icmsdev.com/feedback/" target="_blank">反馈问题</a></li>
 					<li class="muted">·</li>
-					<li><a href="http://www.idreamsoft.com/releases" target="_blank">历史版本</a></li>
+					<li><a href="https://www.icmsdev.com/releases.html" target="_blank">历史版本</a></li>
 				</ul>
 			</div>
 		</footer>
 		<div class="hide">
-			<script type="text/javascript" src="http://www.idreamsoft.com/cms/install.php"></script>
+			<script type="text/javascript" src="https://www.icmsdev.com/cms/install.php"></script>
 			<script type="text/javascript">
 			var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 			document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F7b43330a4da4a6f4353e553988ee8a62' type='text/javascript'%3E%3C/script%3E"));

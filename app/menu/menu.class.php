@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 class menu {
     public static $menu_array = array();
@@ -20,7 +20,7 @@ class menu {
 	}
 
     public static function mid($vars,$sort=0,$parent=null,$level=0){
-        foreach ($vars as $k => $v) {
+        foreach ((array)$vars as $k => $v) {
             ++$sort;
             $key = $v['id']?$v['id']:$k;
             if(!isset($v['sort'])) $v['sort']= $sort;

@@ -11,8 +11,11 @@
         <meta name="mobile-agent" content="format=html5;url=<!--{$site.urls.mobile}-->">
         <link rel="alternate" media="only screen and(max-width: 640px)" href="<!--{$site.urls.mobile}-->">
         <!--{iCMS:public:ui}-->
+        <script type="text/javascript">
+        //移动端跳转 域名不一样时才会跳转
+        redirect_to_mobile("<!--{$site.urls.mobile}-->");
+        </script>
     </head>
-
     <body class="indexApp" i="<!--{$iCMS.APP.NAME}-->">
         <!--{include file="./header.htm"}-->
         <div class="body clearfix ">
@@ -102,7 +105,7 @@
                                         <!--{/if}-->
                                         <div class="media-body">
                                             <h4 class="media-heading">
-                                                <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a>
+                                            <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a>
                                             </h4>
                                             <!--{if $article_list.description}-->
                                             <p class="media-text">
@@ -272,7 +275,7 @@
                     </div>
                     <div class="mod-content">
                         <!--{iCMS:links:list loop='true'}-->
-                            <a target="_blank" href="<!--{$links_list.url}-->"><!--{$links_list.name}--></a>
+                        <a target="_blank" href="<!--{$links_list.url}-->"><!--{$links_list.name}--></a>
                         <!--{/iCMS}-->
                     </div>
                 </div>

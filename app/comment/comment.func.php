@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 class commentFunc{
 	public static function comment_array($vars){
@@ -48,7 +50,7 @@ class commentFunc{
 			'title' => $vars['title'],
 		);
 		iView::assign('comment_vars',$vars);
-		echo iView::render("iCMS://comment/{$tpl}.htm");
+		iView::display("iCMS://comment/{$tpl}.htm");
 	}
 	public static function comment_list($vars){
 		if(!iCMS::$config['comment']['enable']){
@@ -193,7 +195,7 @@ class commentFunc{
 			iCMS::$config['comment']['plugin']['changyan']['appid'] OR iUI::warning('iCMS&#x3a;comment&#x3a;form 标签出错! 畅言评论插件缺少参数"appid"或"appid"值为空.');
 			iCMS::$config['comment']['plugin']['changyan']['appkey'] OR iUI::warning('iCMS&#x3a;comment&#x3a;form 标签出错! 畅言评论插件缺少参数"appkey"或"appkey"值为空.');
 
-			echo iView::render('iCMS://comment/changyan.htm');
+			iView::display('iCMS://comment/changyan.htm');
 			return;
 		}
 		if(!isset($vars['ref'])){
@@ -226,6 +228,6 @@ class commentFunc{
 		unset($vars['method'],$vars['_display']);
 		$vars['query'] = http_build_query($vars);
 		iView::assign('comment_vars',$vars);
-		echo iView::render('iCMS://comment/'.$tpl.'.htm');
+		iView::display('iCMS://comment/'.$tpl.'.htm');
 	}
 }

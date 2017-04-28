@@ -229,10 +229,12 @@ class iTemplateLite {
 
 	function fetch($file,$display = false){
 		if ($this->debugging){
-			$this->_templatelite_debug_info[] = array('type'=> 'template',
-												'filename'  => $file,
-												'depth'     => 0,
-												'exec_time' => array_sum(explode(' ', microtime())) );
+			$this->_templatelite_debug_info[] = array(
+				'type'      => 'template',
+				'filename'  => $file,
+				'depth'     => 0,
+				'exec_time' => array_sum(explode(' ', microtime()))
+			);
 			$included_tpls_idx = count($this->_templatelite_debug_info) - 1;
 		}
 
@@ -278,34 +280,34 @@ class iTemplateLite {
 			$compiler->default_modifiers         = &$this->default_modifiers;
 			$compile_code = $compiler->_compile_file($template_file);
 			if($ret==='code') return $compile_code;
-
 			file_put_contents($compile_file,$compile_code);
 		}
 		if($ret==='file') return $compile_file;
 
-		if($this->template_callback['output']||$this->_plugins['output']){
-			$ret = 'output';
+		if($ret || $this->_plugins['output']){
+			ob_start();
+			$ob_start = true;
 		}
-
-		$ret && ob_start();
 		include $compile_file;
-		if ($ret) {
+		if ($ob_start) {
 			$output = ob_get_contents();
 			ob_end_clean();
-			if($ret == 'output'){
-				echo $this->output_callback($output,$compile_file);
-			}else{
+			$this->_run_output($output,$compile_file);
+			if($ret){
 				return $output;
+			}else{
+				echo $output;
 			}
 		}
 	}
-	function output_callback($content,$file){
-		$content = $this->callback('output',array($content,$file));
+
+	function _run_output(&$content,$file){
+		if(!$this->_plugins['output']) return;
+
 		foreach ((array)$this->_plugins['output'] as $key => $value) {
 			require_once $this->_get_plugin_dir('output.'.$key.'.php');
 			call_user_func_array($value, array(&$content,&$this));
 		}
-		return $content;
 	}
 	function _run_modifier(){
 		$arguments = func_get_args();

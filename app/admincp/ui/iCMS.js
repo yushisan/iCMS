@@ -88,7 +88,7 @@
             opts.skin    = 'iCMS_dialog_alert'
             opts.content = msg;
             opts.height  = 150;
-            opts.lock    = true;
+            opts.modal   = true;
             opts.time    = 3000;
             window.top.iCMS.dialog(opts,callback);
         },
@@ -103,7 +103,7 @@
                 fixed: true,
                 autofocus: false,
                 quickClose: true,
-                lock: true,
+                modal: true,
                 time: null,
                 label:'success',icon: 'check',api:false,elemBack:'beforeremove'
             },
@@ -112,8 +112,8 @@
 
             if(opts.follow){
                 opts.fixed = false;
-                opts.lock  = false;
-                opts.skin = 'iCMS_tooltip_popup'
+                opts.modal = false;
+                opts.skin  = 'iCMS_tooltip_popup'
                 opts.className = 'ui-popup';
                 opts.backdropOpacity = 0;
             }
@@ -135,7 +135,7 @@
             };
             var d = window.dialog(opts);
 
-            if(opts.lock){
+            if(opts.modal){
                 d.showModal();
                 // $(d.backdrop).addClass("ui-popup-overlay").click(function(){
                 //     d.close().remove();

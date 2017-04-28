@@ -1,9 +1,12 @@
-<?php /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
 ?>
@@ -43,7 +46,15 @@ $(function(){
       return confirm('您之前添加过其它章节!确定要取消章节模式?');
     }
   })
+  var hotkey = false;
+
 	$("#<?php echo APP_FORMID;?>").submit(function(){
+    if(hotkey){
+        if(this.action.indexOf('&keyCode=ctrl-s')===-1){
+          this.action+='&keyCode=ctrl-s';
+        }
+    }
+
     var cid = $("#cid option:selected").val();
 		if(cid=="0"){
       $("#cid").focus();
@@ -71,6 +82,16 @@ $(function(){
     //   return false;
     // }
 	});
+  $(document).keydown(function (e) {
+    var keyCode = e.keyCode || e.which || e.charCode;
+    var ctrlKey = e.ctrlKey || e.metaKey;
+    if(ctrlKey && keyCode == 83) {
+        e.preventDefault();
+        hotkey = true;
+        $("#<?php echo APP_FORMID;?>").submit();
+    }
+    hotkey = false;
+  });
 });
 
 function mergeEditorPage(){

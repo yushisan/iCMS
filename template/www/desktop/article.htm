@@ -17,6 +17,10 @@
     <meta name="mobile-agent" content="format=html5;url=<!--{$article.iurl.mobile.url}-->">
     <link rel="alternate" media="only screen and(max-width: 640px)" href="<!--{$article.iurl.mobile.url}-->">
     <!--{iCMS:public:ui}-->
+    <script type="text/javascript">
+    //移动端跳转 域名不一样时才会跳转
+    redirect_to_mobile("<!--{$article.iurl.mobile.url}-->");
+    </script>
 </head>
 
 <body class="articleApp" i="<!--{$iCMS.APP.NAME}-->">
@@ -60,42 +64,8 @@
                         <!--{$article.tags_link}-->
                     </div>
                     <!--{/if}-->
-                    <!--{if $article.markdown}-->
-                    <style>.editormd-html-preview {width: 90%;margin: 0 auto;}</style>
-                    <div class="article-body" id="article-markdown">
-                        <textarea id="article-markdown-content" style="display:none;"><!--{$article.body}--></textarea>
-                    </div>
-                    <!-- markdown解析如果不能正常显示,请自行修改article.htm模板 -->
-                    <link rel="stylesheet" href="./app/admincp/ui/editor.md/css/editormd.preview.min.css" />
-                    <script src="./app/admincp/ui/editor.md/lib/marked.min.js"></script>
-                    <script src="./app/admincp/ui/editor.md/lib/prettify.min.js"></script>
-                    <script src="./app/admincp/ui/editor.md/lib/raphael.min.js"></script>
-                    <script src="./app/admincp/ui/editor.md/lib/underscore.min.js"></script>
-                    <script src="./app/admincp/ui/editor.md/lib/sequence-diagram.min.js"></script>
-                    <script src="./app/admincp/ui/editor.md/lib/flowchart.min.js"></script>
-                    <script src="./app/admincp/ui/editor.md/lib/jquery.flowchart.min.js"></script>
-                    <script src="./app/admincp/ui/editor.md/editormd.min.js"></script>
-                    <script type="text/javascript">
-                    $(function() {
-                        editormd.katexURL={
-                            css : "//cdn.bootcss.com/KaTeX/0.3.0/katex.min",
-                            js  : "//cdn.bootcss.com/KaTeX/0.3.0/katex.min"
-                        },
-                        editormd.markdownToHTML("article-markdown", {
-                            htmlDecode      : "style,script,iframe",  // you can filter tags decode
-                            emoji           : true,
-                            taskList        : true,
-                            tex             : true,  // 默认不解析
-                            flowChart       : true,  // 默认不解析
-                            sequenceDiagram : true,  // 默认不解析
-                        });
-                        //懒得做判断 直接隐藏下面正文
-                        $("#article-content").hide();
-                    });
-                    </script>
-                    <!--{/if}-->
                     <div class="article-body">
-                        <div id="article-content">
+                        <div class="<!--{if $article.markdown}-->markdown<!--{/if}-->">
                             <!--{$article.body}-->
                         </div>
                         <!--{if $article.page.end}-->

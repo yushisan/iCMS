@@ -1,11 +1,11 @@
 <?php
 /**
 * iCMS - i Content Management System
-* Copyright (c) 2007-2017 idreamsoft.com iiimon Inc. All rights reserved.
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
 *
-* @author coolmoo <idreamsoft@qq.com>
-* @site http://www.idreamsoft.com
-* @licence http://www.idreamsoft.com/license.php
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 
@@ -113,12 +113,14 @@ class formsAdmincp{
         if(empty($rs)){
           $rs['type']   = "1";
           $rs['status'] = "1";
+          $rs['create'] = "1";
           $rs['fields'] = forms::base_fields_json();
           $rs['fields'] = json_decode($rs['fields'],true);
           $base_fields  = forms::base_fields_array();
         }
         empty($rs['tpl']) && $rs['tpl'] = '{iTPL}/forms.htm';
-        $rs['app'] = ltrim($rs['app'],'forms_');
+        $rs['app'] = forms::short_app($rs['app']);
+        apps_mod::$base_fields_key = array('id');
         include admincp::view("forms.create");
     }
   /**
@@ -135,11 +137,12 @@ class formsAdmincp{
         $description   = iSecurity::escapeStr($_POST['_description']);
         $type    = (int)$_POST['type'];
         $status  = (int)$_POST['status'];
+        $create  = (int)$_POST['create']?true:false;
 
         $name OR iUI::alert('表单名称不能为空!');
         empty($app) && $app = iPinyin::get($name);
         empty($title) && $title = $name;
-        $app = 'forms_'.ltrim($app,'forms_');
+        $app = 'forms_'.forms::short_app($app);
 
         $table_array  = $_POST['table'];
         if($table_array){
@@ -185,22 +188,26 @@ class formsAdmincp{
         $array   = compact(array('app','name','title','pic','description','tpl','table','config','fields','addtime','type','status'));
 
         if(empty($id)) {
-
             iDB::value("SELECT `id` FROM `#iCMS@__forms` where `app` ='$app'") && iUI::alert('该表单已经存在!');
-            apps_db::check_table(iDB::table($array['app'])) && iUI::alert('['.$array['app'].']数据表已经存在!');
+            if($create){
+              apps_db::check_table(iDB::table($array['app'])) && iUI::alert('['.$array['app'].']数据表已经存在!');
+            }
 
             // iDB::$print_sql = true;
 
             if($addons_fieldata){
               $addons_name = apps_mod::data_table_name($array['app']);
-              apps_db::check_table(iDB::table($addons_name)) && iUI::alert('['.$addons_name.']附加表已经存在!');
+              if($create){
+                apps_db::check_table(iDB::table($addons_name)) && iUI::alert('['.$addons_name.']附加表已经存在!');
+              }
             }
 
             //创建基本表
             $tb = apps_db::create_table(
               $array['app'],
               apps_mod::get_field_array($fieldata),//获取字段数组
-              forms::base_fields_index()//索引
+              forms::base_fields_index(),          //索引
+              $create
             );
             array_push ($tb,null,$array['name']);
             $table_array = array();
@@ -211,11 +218,12 @@ class formsAdmincp{
               $union_id = apps_mod::data_union_id($array['app']);//关联基本表id
               $addons_base_fields = apps_mod::base_fields($array['app']);//xxx_data附加表的基础字段
               $addons_fieldata = $addons_base_fields+$addons_fieldata;
-              $table_array += apps_mod::data_create_table($addons_fieldata,$addons_name,$union_id);
+              $table_array += apps_mod::data_create_table($addons_fieldata,$addons_name,$union_id,$create);
               // //添加到字段数据里
               // $field_array = array_merge($field_array,$addons_base_fields);
               // $array['fields'] = addslashes(cnjson_decode($field_array));
             }
+
             $array['table']  = $table_array;
             $array['config'] = $config_array;
 

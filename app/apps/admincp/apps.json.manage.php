@@ -1,8 +1,11 @@
-<?php /**
-* @package iCMS
-* @copyright 2007-2017, iDreamSoft
-* @license http://www.idreamsoft.com iDreamSoft
-* @author coolmoo <idreamsoft@qq.com>
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
@@ -95,7 +98,7 @@ $(function(){
                 <td>
                   <?php
                   if($data['template'])foreach ($data['template'] as $key => $tpltags) {
-                    echo '<a href="http://www.idreamsoft.com/iCMS/doc/'.str_replace(array(':','$'), array('_',''), $tpltags).'" target="_blank" title="点击查看模板标签说明">&lt;!--{'.$tpltags.'}--&gt;</a><br />';
+                    echo '<a href="https://www.icmsdev.com/docs/'.str_replace(array(':','$'), array('_',''), $tpltags).'" target="_blank" title="点击查看模板标签说明">&lt;!--{'.$tpltags.'}--&gt;</a><br />';
                   }
                   ?>
                   <td>

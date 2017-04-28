@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 
 class commentApp {
@@ -24,7 +26,7 @@ class commentApp {
 	}
 	public function API_widget() {
 		$name = iSecurity::escapeStr($_GET['name']);
-		iView::render('iCMS://comment/widget.'.$name.'.htm');
+		iView::display('iCMS://comment/widget.'.$name.'.htm');
 	}
 	public function API_list() {
 		$_GET['_display'] = $_GET['display'];
@@ -64,7 +66,7 @@ class commentApp {
 		// $array = comment_list($vars);
 		// iUI::json($array);
 		iView::assign('vars',$vars);
-		iView::render('iCMS://comment/api.json.htm');
+		iView::display('iCMS://comment/api.json.htm');
 	}
 	public static function redirect_url($var) {
 		$url = iCMS_API.'?app=comment&do=redirect&iid='.$var['iid'].'&appid='.$var['appid'].'&cid='.$var['cid'];

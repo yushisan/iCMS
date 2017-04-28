@@ -1,11 +1,12 @@
 <?php
-
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 class contentApp {
     public $methods = array('iCMS', 'hits','vote', 'good', 'bad', 'like_comment', 'comment');
     public $appid   = null;
@@ -86,10 +87,8 @@ class contentApp {
             iView::assign('app', apps::get_app_lite($this->data));
             iView::assign($this->app, $rs);
             iView::assign('content', $rs);
-            $html = iView::render($app_tpl, $this->app);
-            if (iView::$gateway == "html") {
-                return array($html, $rs);
-            }
+            $view = iView::render($app_tpl, $this->app);
+            if($view) return array($view,$rs);
         } else {
             return $rs;
         }

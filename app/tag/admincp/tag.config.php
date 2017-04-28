@@ -1,8 +1,11 @@
-<?php /**
-* @package iCMS
-* @copyright 2007-2017, iDreamSoft
-* @license http://www.idreamsoft.com iDreamSoft
-* @author coolmoo <idreamsoft@qq.com>
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 configAdmincp::head("标签系统设置");
@@ -46,7 +49,13 @@ configAdmincp::head("标签系统设置");
 <div class="input-prepend input-append">
   <span class="add-on">标签模板</span>
   <input type="text" name="config[tpl]" class="span4" id="tpl" value="<?php echo $config['tpl'] ; ?>"/>
-<?php echo filesAdmincp::modal_btn('模板','tpl');?></div>
+  <?php echo filesAdmincp::modal_btn('模板','tpl');?>
+</div>
+<div class="clearfloat mb10"></div>
+<div class="input-prepend"> <span class="add-on">TKEY分割符</span>
+  <input type="text" name="config[tkey]" class="span4" id="tkey" value="<?php echo $config['tkey'] ; ?>"/>
+</div>
+<span class="help-inline">留空，按紧凑型生成(pinyin)</span>
 <div class="mt20"></div>
 <div class="alert alert-block">
   此配置为标签的URL默认配置<br />

@@ -1,8 +1,11 @@
-<?php /**
-* @package iCMS
-* @copyright 2007-2017, iDreamSoft
-* @license http://www.idreamsoft.com iDreamSoft
-* @author coolmoo <idreamsoft@qq.com>
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
 */
 defined('iPHP') OR exit('What are you doing?');
 admincp::head();
@@ -10,6 +13,7 @@ admincp::head();
 <style type="text/css">
 #field-default .add-on { width: 70px;text-align: right; }
 .iCMS_dialog .ui-dialog-content .chosen-container{position: relative;}
+.add_table_item{vertical-align: top;margin-top: 5px;}
 </style>
 <script type="text/javascript">
 $(function(){
@@ -26,7 +30,19 @@ $(function(){
       iCMS.alert("表单标识不能为空");
       return false;
     }
-  })
+  });
+  $(".add_table_item").click(function(){
+    // var clone = $("#table_item").clone();
+    // console.log(clone);
+      var key = $("#table_list").find('tr').size();
+      var tr = $("<tr>");
+      for (var i = 0; i < 4; i++) {
+          var td = $("<td>");
+          td.html('<input type="text" name="table['+key+']['+i+']" class="span2" id="table_'+key+'_'+i+'" value=""/>');
+          tr.append(td);
+      };
+      $("#table_list").append(tr);
+  });
 })
 </script>
 
@@ -98,9 +114,26 @@ $(function(){
               <span class="help-inline"></span>
             </div>
             <div class="clearfloat mb10"></div>
-            <?php if($rs['table']){?>
-            <h3 class="title" style="width:450px;">数据表</h3>
-            <table class="table table-bordered bordered" style="width:460px;">
+            <?php if(empty($this->id)){?>
+            <div class="input-prepend">
+              <span class="add-on">是否同时创建数据表</span>
+              <div class="switch" data-on-label="是" data-off-label="否">
+                <input type="checkbox" data-type="switch" name="create" id="create" <?php echo $rs['create']?'checked':''; ?>/>
+              </div>
+            </div>
+            <span class="help-block">
+              如果选择不同时创建数据表,将只保存表单数据而不创建数据表.需要手工建表<br />
+              一般用于数据表已经存在,只需要简单的查/增/改数据功能
+            </span>
+            <div class="clearfloat mb10"></div>
+            <?php }?>
+            <h3 class="title" style="width:620px;">
+              <span>数据表</span>
+              <button type="button" class="btn btn-link add_table_item">
+                <i class="fa fa-plus-square"></i> 添加
+              </button>
+            </h3>
+            <table class="table table-bordered bordered" style="width:600px;">
               <thead>
                 <tr>
                   <th style="width:120px;">表名</th>
@@ -109,20 +142,22 @@ $(function(){
                   <th>名称</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="table_list">
+              <?php if($rs['table']){?>
                 <?php foreach ((array)$rs['table'] as $tkey => $tval) {?>
                 <tr>
-                  <td><input type="hidden" name="table[<?php echo $tkey; ?>][0]" value="<?php echo $tval['name'] ; ?>"/> <?php echo $tval['name'] ; ?></td>
-                  <td><input type="hidden" name="table[<?php echo $tkey; ?>][1]" value="<?php echo $tval['primary'] ; ?>"/> <?php echo $tval['primary'] ; ?></td>
-                  <td><input type="hidden" name="table[<?php echo $tkey; ?>][2]" value="<?php echo $tval['union'] ; ?>"/> <?php echo $tval['union'] ; ?></td>
-                  <td><input type="text" name="table[<?php echo $tkey; ?>][3]" class="span2" id="table_<?php echo $tkey; ?>_2" value="<?php echo $tval['label'] ; ?>"/></td>
+                  <td><input type="text" name="table[<?php echo $tkey; ?>][0]" class="span2" id="table_<?php echo $tkey; ?>_0" value="<?php echo $tval['name'] ; ?>"/></td>
+                  <td><input type="text" name="table[<?php echo $tkey; ?>][1]" class="span2" id="table_<?php echo $tkey; ?>_1" value="<?php echo $tval['primary'] ; ?>"/></td>
+                  <td><input type="text" name="table[<?php echo $tkey; ?>][2]" class="span2" id="table_<?php echo $tkey; ?>_2" value="<?php echo $tval['union'] ; ?>"/></td>
+                  <td><input type="text" name="table[<?php echo $tkey; ?>][3]" class="span2" id="table_<?php echo $tkey; ?>_3" value="<?php echo $tval['label'] ; ?>"/></td>
                 </tr>
                 <?php } ?>
+              <?php }else{ ?>
+                <input name="table" type="hidden" value="<?php echo $rs['table']; ?>" />
+              <?php } ?>
               </tbody>
             </table>
-            <?php }else{ ?>
-            <input name="table" type="hidden" value="<?php echo $rs['table']; ?>" />
-            <?php } ?>
+            <span class="help-inline">非二次开发,请勿修改表名</span>
             <div class="clearfloat mb10"></div>
           </div>
           <!-- 数据表字段 -->
@@ -141,6 +176,14 @@ $(function(){
         </form>
       </div>
     </div>
+  </div>
+</div>
+<div class="hide">
+  <div id="table_item">
+      <td><input type="text" name="table[~KEY~][0]" class="span2" id="table_~KEY~_0" value=""/></td>
+      <td><input type="text" name="table[~KEY~][1]" class="span2" id="table_~KEY~_1" value=""/></td>
+      <td><input type="text" name="table[~KEY~][2]" class="span2" id="table_~KEY~_2" value=""/></td>
+      <td><input type="text" name="table[~KEY~][3]" class="span2" id="table_~KEY~_3" value=""/></td>
   </div>
 </div>
 <?php include admincp::view("former.editor","former");?>

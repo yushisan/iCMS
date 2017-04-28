@@ -1,9 +1,12 @@
-<?php /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 ?>
 <div id="header" class="navbar navbar-static-top">
@@ -11,7 +14,7 @@ defined('iPHP') OR exit('What are you doing?');
     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
     <span class="fa fa-bars"></span>
     </a>
-    <a class="brand iCMS-logo" href="http://www.idreamsoft.com" target="_blank">
+    <a class="brand iCMS-logo" href="https://www.icmsdev.com" target="_blank">
       <img src="./app/admincp/ui/iCMS.logo.mini.png" />
     </a>
       <div class="nav-collapse collapse">
@@ -42,7 +45,7 @@ defined('iPHP') OR exit('What are you doing?');
 <?php if(iCMS::$config['other']['sidebar_enable']){?>
 <div id="sidebar" class="navbar">
 	<div id="sidebartop" class="navbar-inner">
-    <a class="brand iCMS-logo" href="http://www.idreamsoft.com" target="_blank">
+    <a class="brand iCMS-logo" href="https://www.icmsdev.com" target="_blank">
     <img src="./app/admincp/ui/iCMS.logo.mini.png" />
     </a>
   </div>

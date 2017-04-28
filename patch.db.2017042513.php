@@ -4,9 +4,27 @@ if(!defined('iPHP')){
 	echo patch_db_2017042513();
 }
 function patch_db_2017042513(){
-    iDB::query("DELETE FROM `#iCMS@__apps`WHERE `id` < '99'");
     iDB::query("
-        INSERT  INTO `icms_apps`(`id`,`app`,`name`,`title`,`apptype`,`type`,`table`,`config`,`fields`,`menu`,`addtime`,`status`) VALUES
+        CREATE TABLE IF NOT EXISTS `#iCMS@__apps` (
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '应用ID appid',
+          `app` varchar(100) NOT NULL DEFAULT '' COMMENT '应用标识',
+          `name` varchar(100) NOT NULL DEFAULT '' COMMENT '应用名',
+          `title` varchar(100) NOT NULL DEFAULT '' COMMENT '应用标题',
+          `apptype` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '类型 0官方 1本地 2自定义',
+          `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '应用类型',
+          `table` text NOT NULL COMMENT '应用表',
+          `config` text NOT NULL COMMENT '应用配置',
+          `fields` text NOT NULL COMMENT '应用自定义字段',
+          `menu` text NOT NULL COMMENT '应用菜单',
+          `addtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+          `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '应用状态',
+          PRIMARY KEY (`id`),
+          KEY `idx_name` (`app`)
+        ) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+    ");
+    iDB::query("DELETE FROM `#iCMS@__apps` WHERE `id` < '99'");
+    iDB::query("
+        INSERT  INTO `#iCMS@__apps` (`id`,`app`,`name`,`title`,`apptype`,`type`,`table`,`config`,`fields`,`menu`,`addtime`,`status`) VALUES
         (1,'article','文章系统','文章',0,1,'{\"article\":[\"article\",\"id\",\"\",\"文章\"],\"article_data\":[\"article_data\",\"id\",\"aid\",\"正文\"]}','{\"iFormer\":\"1\",\"info\":\"文章资讯系统\",\"template\":[\"iCMS:article:list\",\"iCMS:article:search\",\"iCMS:article:data\",\"iCMS:article:prev\",\"iCMS:article:next\",\"iCMS:article:array\",\"$article\"],\"version\":\"v6.2.0\",\"menu\":\"main\",\"iurl\":{\"rule\":\"2\",\"primary\":\"id\",\"page\":\"p\"}}','','[{\"id\":\"article\",\"sort\":\"2\",\"caption\":\"文章\",\"icon\":\"pencil-square-o\",\"children\":[{\"caption\":\"文章系统配置\",\"href\":\"article&do=config\",\"icon\":\"cog\"},{\"caption\":\"-\"},{\"caption\":\"栏目管理\",\"href\":\"article_category\",\"icon\":\"list-alt\"},{\"caption\":\"添加栏目\",\"href\":\"article_category&do=add\",\"icon\":\"edit\"},{\"caption\":\"-\"},{\"caption\":\"添加文章\",\"href\":\"article&do=add\",\"icon\":\"edit\"},{\"caption\":\"文章管理\",\"href\":\"article&do=manage\",\"icon\":\"list-alt\"},{\"caption\":\"草稿箱\",\"href\":\"article&do=inbox\",\"icon\":\"inbox\"},{\"caption\":\"回收站\",\"href\":\"article&do=trash\",\"icon\":\"trash-o\"},{\"caption\":\"-\"},{\"caption\":\"用户文章管理\",\"href\":\"article&do=user\",\"icon\":\"check-circle\"},{\"caption\":\"审核用户文章\",\"href\":\"article&do=examine\",\"icon\":\"minus-circle\"},{\"caption\":\"淘汰的文章\",\"href\":\"article&do=off\",\"icon\":\"times-circle\"},{\"caption\":\"-\"},{\"caption\":\"文章评论管理\",\"href\":\"comment&appname=article&appid=1\",\"icon\":\"comments\"}]}]',1491150262,1),
         (2,'category','分类系统','分类',0,1,'{\"category\":[\"category\",\"cid\",\"\",\"分类\"],\"category_map\":[\"category_map\",\"id\",\"node\",\"分类映射\"]}','{\"iFormer\":\"1\",\"info\":\"通用无限级分类系统\",\"template\":[\"iCMS:category:array\",\"iCMS:category:list\",\"$category\"],\"version\":\"v6.2.0\",\"menu\":\"main\",\"iurl\":{\"rule\":\"1\",\"primary\":\"cid\"}}','','',1488771647,1),
         (3,'tag','标签系统','标签',0,1,'{\"tags\":[\"tags\",\"id\",\"\",\"标签\"],\"tags_map\":[\"tags_map\",\"id\",\"node\",\"标签映射\"]}','{\"iFormer\":\"1\",\"info\":\"自由多样性标签系统\",\"template\":[\"iCMS:tag:list\",\"iCMS:tag:array\",\"$tag\"],\"version\":\"v6.2.0\",\"menu\":\"main\",\"iurl\":{\"rule\":\"3\",\"primary\":\"id\"}}','','[{\"id\":\"assist\",\"children\":[{\"id\":\"tag\",\"caption\":\"标签\",\"icon\":\"tags\",\"children\":[{\"caption\":\"标签配置\",\"href\":\"tag&do=config\",\"icon\":\"cog\"},{\"caption\":\"-\"},{\"caption\":\"标签管理\",\"href\":\"tag\",\"icon\":\"tag\"},{\"caption\":\"添加标签\",\"href\":\"tag&do=add\",\"icon\":\"edit\"},{\"caption\":\"-\"},{\"caption\":\"分类管理\",\"href\":\"tag_category\",\"icon\":\"sitemap\"},{\"caption\":\"添加分类\",\"href\":\"tag_category&do=add\",\"icon\":\"edit\"}]}]}\r\n]',1488771652,1),

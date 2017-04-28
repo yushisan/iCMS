@@ -181,7 +181,7 @@ class Redis_client{
             $response = @gzuncompress($response);
         }
         $unresponse = unserialize($response);
-        if($unresponse && $response ){
+        if(is_array($unresponse) && $response ){
             $response = $unresponse;
         }
         return $response;
@@ -190,7 +190,7 @@ class Redis_client{
         $this->write('MGET', $keys);
         $response = $this->get_response();
         $unresponse = array_map('unserialize',$response);
-        if($unresponse && $response ){
+        if(is_array($unresponse) && $response ){
             $response = $unresponse;
         }
         foreach($keys as $i =>$key){
@@ -219,7 +219,7 @@ class Redis_client{
             $response = @gzuncompress($response);
         }
         $unresponse = unserialize($response);
-        if($unresponse && $response ){
+        if(is_array($unresponse) && $response ){
             $response = $unresponse;
         }
         return $response;
@@ -241,7 +241,7 @@ class Redis_client{
         $this->write('MGET', $keys);
         $response = $this->get_response();
         $unresponse = array_map('unserialize',$response);
-        if($unresponse && $response ){
+        if(is_array($unresponse) && $response ){
             $response = $unresponse;
         }
         return $response;

@@ -1,9 +1,12 @@
-<?php /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 ?>
 <!DOCTYPE html>
@@ -12,7 +15,7 @@ defined('iPHP') OR exit('What are you doing?');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>iCMS Permission Denied!</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta content="iDreamSoft Inc." name="Copyright" />
+<meta content="iCMSdev.com" name="Copyright" />
 <link rel="stylesheet" href="./app/admincp/ui/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/admincp/ui/bootstrap/2.3.2/css/bootstrap-responsive.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/admincp/ui/iCMS.css" type="text/css" />

@@ -19,6 +19,10 @@
     <meta name="mobile-agent" content="format=html5;url=<!--{$category.iurl.mobile.url}-->">
     <link rel="alternate" media="only screen and(max-width: 640px)" href="<!--{$category.iurl.mobile.url}-->">
     <!--{iCMS:public:ui}-->
+    <script type="text/javascript">
+    //移动端跳转 域名不一样时才会跳转
+    redirect_to_mobile("<!--{$category.iurl.mobile.url}-->");
+    </script>
 </head>
 
 <body class="categoryApp" i="<!--{$iCMS.APP.NAME}-->">

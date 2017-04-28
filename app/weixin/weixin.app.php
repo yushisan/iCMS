@@ -1,10 +1,12 @@
 <?php
 /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 
 if(iPHP_DEBUG){
@@ -202,7 +204,7 @@ class weixinApp {
         // var_dump($event);
         if(is_array($event) &&isset($event['msgtype']) && $event['msgtype']=='tpl'){
             iView::assign('weixin',self::object2array($this->XML));
-            iView::render($event['msg']['Tpl']);
+            iView::display($event['msg']['Tpl']);
             exit;
         }
         weixin::msg_xml($event['msg'],$this->XML->FromUserName,$this->XML->ToUserName);

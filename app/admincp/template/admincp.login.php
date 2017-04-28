@@ -1,9 +1,12 @@
-<?php /**
- * @package iCMS
- * @copyright 2007-2017, iDreamSoft
- * @license http://www.idreamsoft.com iDreamSoft
- * @author coolmoo <idreamsoft@qq.com>
- */
+<?php
+/**
+* iCMS - i Content Management System
+* Copyright (c) 2007-2017 iCMSdev.com. All rights reserved.
+*
+* @author icmsdev <master@icmsdev.com>
+* @site https://www.icmsdev.com
+* @licence https://www.icmsdev.com/LICENSE.html
+*/
 defined('iPHP') OR exit('What are you doing?');
 ?>
 <!DOCTYPE html>
@@ -14,7 +17,7 @@ defined('iPHP') OR exit('What are you doing?');
 <meta name="renderer" content="webkit">
 <meta name="force-rendering" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<meta content="iDreamSoft Inc." name="Copyright" />
+<meta content="iCMSdev.com" name="Copyright" />
 <link rel="stylesheet" href="./app/admincp/ui/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/admincp/ui/bootstrap/2.3.2/css/bootstrap-responsive.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/admincp/ui/artDialog/ui-dialog.css" type="text/css" />
@@ -111,7 +114,7 @@ $(function(){
 <body>
 <div class="container">
   <div class="iCMS_login">
-    <a class="iCMS-logo" href="http://www.idreamsoft.com" target="_blank">
+    <a class="iCMS-logo" href="https://www.icmsdev.com" target="_blank">
       <img src="./app/admincp/ui/iCMS.logo.login.png" />
     </a>
     <div class="clear mt10"></div>
